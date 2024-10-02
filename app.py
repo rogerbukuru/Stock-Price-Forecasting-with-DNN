@@ -2,6 +2,7 @@ import argparse
 import time
 
 import art
+import os
 import numpy as np
 
 from invest.decision import investment_portfolio
@@ -42,11 +43,11 @@ if __name__ == '__main__':
                                      epilog='Version 1.0')
     parser.add_argument("--start", type=int, default=2015)
     parser.add_argument("--end", type=int, default=2018)
-    parser.add_argument("--margin_of_safety", type=float, default=0.10)
-    parser.add_argument("--beta", type=float, default=1.00)
+    parser.add_argument("--margin_of_safety", type=float, default=1.6)
+    parser.add_argument("--beta", type=float, default=0.6)
     parser.add_argument("--extension", type=str2bool, default=False)
     parser.add_argument("--noise", type=str2bool, default=False)
-    parser.add_argument("--ablation", type=str2bool, default=False)
+    parser.add_argument("--ablation", type=str2bool, default=True) # If true will only perform value investing if the network is 'v'
     parser.add_argument("--network", type=str, default='v')
     parser.add_argument("--gnn", type=str2bool, default=False)
     parser.add_argument("--holding_period", type=int, default=-1)
@@ -76,3 +77,4 @@ if __name__ == '__main__':
         print("JCSEV", [round(v, 2) for v in jcsev_averaged_metrics])
     else:
         main()
+        
