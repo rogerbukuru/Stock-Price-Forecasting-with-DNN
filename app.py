@@ -43,7 +43,7 @@ if __name__ == '__main__':
                                      epilog='Version 1.0')
     parser.add_argument("--start", type=int, default=2015)
     parser.add_argument("--end", type=int, default=2018)
-    parser.add_argument("--margin_of_safety", type=float, default=1.6)
+    parser.add_argument("--margin_of_safety", type=float, default=1.4)
     parser.add_argument("--beta", type=float, default=0.6)
     parser.add_argument("--extension", type=str2bool, default=False)
     parser.add_argument("--noise", type=str2bool, default=False)
