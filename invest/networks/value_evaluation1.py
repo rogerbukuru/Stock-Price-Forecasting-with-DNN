@@ -1,0 +1,210 @@
+import os
+import numpy as np
+import pyAgrum as gum
+
+# Define CPT learning algorithms: Maximum Likelihood Estimation (MLE), Bayesian Parameter Estimation (BPE), and Maximum Entropy (ME)
+def learn_cpt_mle(data, model, variable):
+    learner = gum.BNLearner(data, model)
+    learner.useSmoothingPrior()
+    learner.useAprioriSmoothing(0.1)  # A very small Laplace smoothing to avoid zero probabilities
+    learner.addParameterEstimator(variable, gum.MLE())
+    learner.learnParameters()
+    return learner.paramCPT(variable)
+
+def learn_cpt_bpe(data, model, variable):
+    learner = gum.BNLearner(data, model)
+    learner.useAprioriSmoothing(0.1)  # Use some smoothing
+    learner.addParameterEstimator(variable, gum.BayesianParameterEstimation())
+    learner.learnParameters()
+    return learner.paramCPT(variable)
+
+def learn_cpt_me(data, model, variable):
+    learner = gum.BNLearner(data, model)
+    learner.useAprioriSmoothing(0.1)  # Use some smoothing
+    learner.addParameterEstimator(variable, gum.MaxEntropyParameterEstimator())
+    learner.learnParameters()
+    return learner.paramCPT(variable)
+
+def value_network(pe_relative_market_state, pe_relative_sector_state, forward_pe_current_vs_history_state,
+                  future_performance_state=None, data=None, algorithm='MLE'):
+    """
+    Returns the final Value Network decision.
+
+    Parameters
+    ----------
+    pe_relative_market_state : str
+       Discrete state for PE relative to market
+    pe_relative_sector_state : str
+       Discrete state for PE relative to sector
+    forward_pe_current_vs_history_state: str
+        Discrete state for Forward PE Current vs History
+    future_performance_state: Union[None, str]
+        Default value is None
+    data: pandas.DataFrame
+        A dataset for learning CPTs if provided
+    algorithm: str
+        The algorithm to use for CPT learning ('MLE', 'BPE', 'ME'). Defaults to 'MLE'.
+
+    Returns
+    -------
+    str
+    """
+    ve_model = gum.InfluenceDiagram()
+
+    # Decision node for Expensive_E
+    expensive_decision = gum.LabelizedVariable('Expensive_E', '', 2)
+    expensive_decision.changeLabel(0, 'No')
+    expensive_decision.changeLabel(1, 'Yes')
+    ve_model.addDecisionNode(expensive_decision)
+
+    # Decision node for ValueRelativeToPrice
+    value_relative_to_price_decision = gum.LabelizedVariable('ValueRelativeToPrice', '', 3)
+    value_relative_to_price_decision.changeLabel(0, 'Cheap')
+    value_relative_to_price_decision.changeLabel(1, 'FairValue')
+    value_relative_to_price_decision.changeLabel(2, 'Expensive')
+    ve_model.addDecisionNode(value_relative_to_price_decision)
+
+    # Add a chance node FutureSharePerformance
+    future_share_performance = gum.LabelizedVariable('FutureSharePerformance', '', 3)
+    future_share_performance.changeLabel(0, 'Positive')
+    future_share_performance.changeLabel(1, 'Stagnant')
+    future_share_performance.changeLabel(2, 'Negative')
+    ve_model.addChanceNode(future_share_performance)
+
+    # Add a chance node PERelative_ShareMarket
+    pe_relative_market = gum.LabelizedVariable('PERelative_ShareMarket', '', 3)
+    pe_relative_market.changeLabel(0, 'Cheap')
+    pe_relative_market.changeLabel(1, 'FairValue')
+    pe_relative_market.changeLabel(2, 'Expensive')
+    ve_model.addChanceNode(pe_relative_market)
+
+    # Add a chance node PERelative_ShareSector
+    pe_relative_sector = gum.LabelizedVariable('PERelative_ShareSector', '', 3)
+    pe_relative_sector.changeLabel(0, 'Cheap')
+    pe_relative_sector.changeLabel(1, 'FairValue')
+    pe_relative_sector.changeLabel(2, 'Expensive')
+    ve_model.addChanceNode(pe_relative_sector)
+
+    # Add a chance node ForwardPE_CurrentVsHistory
+    forward_pe_current_vs_history = gum.LabelizedVariable('ForwardPE_CurrentVsHistory', '', 3)
+    forward_pe_current_vs_history.changeLabel(0, 'Cheap')
+    forward_pe_current_vs_history.changeLabel(1, 'FairValue')
+    forward_pe_current_vs_history.changeLabel(2, 'Expensive')
+    ve_model.addChanceNode(forward_pe_current_vs_history)
+
+    # Utility node for utility_expensive
+    utility_expensive = gum.LabelizedVariable('Expensive_Utility', '', 1)
+    ve_model.addUtilityNode(utility_expensive)
+
+    # Utility node for utility_value_relative_to_price
+    utility_value_relative_to_price = gum.LabelizedVariable('VRP_Utility', '', 1)
+    ve_model.addUtilityNode(utility_value_relative_to_price)
+
+    # Arcs
+    ve_model.addArc(ve_model.idFromName('FutureSharePerformance'), ve_model.idFromName('PERelative_ShareMarket'))
+    ve_model.addArc(ve_model.idFromName('FutureSharePerformance'), ve_model.idFromName('PERelative_ShareSector'))
+    ve_model.addArc(ve_model.idFromName('FutureSharePerformance'), ve_model.idFromName('ForwardPE_CurrentVsHistory'))
+    ve_model.addArc(ve_model.idFromName('FutureSharePerformance'), ve_model.idFromName('Expensive_Utility'))
+    ve_model.addArc(ve_model.idFromName('FutureSharePerformance'), ve_model.idFromName('VRP_Utility'))
+    ve_model.addArc(ve_model.idFromName('PERelative_ShareMarket'), ve_model.idFromName('Expensive_E'))
+    ve_model.addArc(ve_model.idFromName('PERelative_ShareMarket'), ve_model.idFromName('ValueRelativeToPrice'))
+    ve_model.addArc(ve_model.idFromName('PERelative_ShareSector'), ve_model.idFromName('Expensive_E'))
+    ve_model.addArc(ve_model.idFromName('PERelative_ShareSector'), ve_model.idFromName('ValueRelativeToPrice'))
+    ve_model.addArc(ve_model.idFromName('ForwardPE_CurrentVsHistory'), ve_model.idFromName('ValueRelativeToPrice'))
+    ve_model.addArc(ve_model.idFromName('Expensive_E'), ve_model.idFromName('ForwardPE_CurrentVsHistory'))
+    ve_model.addArc(ve_model.idFromName('Expensive_E'), ve_model.idFromName('ValueRelativeToPrice'))
+    ve_model.addArc(ve_model.idFromName('Expensive_E'), ve_model.idFromName('Expensive_Utility'))
+    ve_model.addArc(ve_model.idFromName('ValueRelativeToPrice'), ve_model.idFromName('VRP_Utility'))
+
+    # Utilities
+    ve_model.utility(ve_model.idFromName('Expensive_Utility'))[{'Expensive_E': 'Yes'}] = [[-300], [150], [200]]
+    ve_model.utility(ve_model.idFromName('Expensive_Utility'))[{'Expensive_E': 'No'}] = [[350], [-150], [-200]]
+    ve_model.utility(ve_model.idFromName('VRP_Utility'))[{'ValueRelativeToPrice': 'Cheap'}] = [[200], [-75], [-200]]
+    ve_model.utility(ve_model.idFromName('VRP_Utility'))[{'ValueRelativeToPrice': 'FairValue'}] = [[100], [0], [-75]]
+    ve_model.utility(ve_model.idFromName('VRP_Utility'))[{'ValueRelativeToPrice': 'Expensive'}] = [[-100], [100], [150]]
+
+    # CPTs
+    if data is not None:
+        if algorithm == 'MLE':
+            ve_model.cpt(ve_model.idFromName('FutureSharePerformance'))[:] = learn_cpt_mle(data, ve_model, 'FutureSharePerformance')
+            ve_model.cpt(ve_model.idFromName('PERelative_ShareMarket'))[:] = learn_cpt_mle(data, ve_model, 'PERelative_ShareMarket')
+            ve_model.cpt(ve_model.idFromName('PERelative_ShareSector'))[:] = learn_cpt_mle(data, ve_model, 'PERelative_ShareSector')
+            ve_model.cpt(ve_model.idFromName('ForwardPE_CurrentVsHistory'))[:] = learn_cpt_mle(data, ve_model, 'ForwardPE_CurrentVsHistory')
+        elif algorithm == 'BPE':
+            ve_model.cpt(ve_model.idFromName('FutureSharePerformance'))[:] = learn_cpt_bpe(data, ve_model, 'FutureSharePerformance')
+            ve_model.cpt(ve_model.idFromName('PERelative_ShareMarket'))[:] = learn_cpt_bpe(data, ve_model, 'PERelative_ShareMarket')
+            ve_model.cpt(ve_model.idFromName('PERelative_ShareSector'))[:] = learn_cpt_bpe(data, ve_model, 'PERelative_ShareSector')
+            ve_model.cpt(ve_model.idFromName('ForwardPE_CurrentVsHistory'))[:] = learn_cpt_bpe(data, ve_model, 'ForwardPE_CurrentVsHistory')
+        elif algorithm == 'ME':
+            ve_model.cpt(ve_model.idFromName('FutureSharePerformance'))[:] = learn_cpt_me(data, ve_model, 'FutureSharePerformance')
+            ve_model.cpt(ve_model.idFromName('PERelative_ShareMarket'))[:] = learn_cpt_me(data, ve_model, 'PERelative_ShareMarket')
+            ve_model.cpt(ve_model.idFromName('PERelative_ShareSector'))[:] = learn_cpt_me(data, ve_model, 'PERelative_ShareSector')
+            ve_model.cpt(ve_model.idFromName('ForwardPE_CurrentVsHistory'))[:] = learn_cpt_me(data, ve_model, 'ForwardPE_CurrentVsHistory')
+    else:
+        # Hardcoded CPTs (original values if no data is provided)
+        ve_model.cpt(ve_model.idFromName('FutureSharePerformance'))[0] = 0.44444  # Positive
+        ve_model.cpt(ve_model.idFromName('FutureSharePerformance'))[1] = 0.14815  # Stagnant
+        ve_model.cpt(ve_model.idFromName('FutureSharePerformance'))[2] = 0.40741  # Negative
+
+        ve_model.cpt(ve_model.idFromName('PERelative_ShareMarket'))[{'FutureSharePerformance': 'Positive'}] = [0.70, 0.20, 0.10]
+        ve_model.cpt(ve_model.idFromName('PERelative_ShareMarket'))[{'FutureSharePerformance': 'Stagnant'}] = [0.25, 0.50, 0.25]
+        ve_model.cpt(ve_model.idFromName('PERelative_ShareMarket'))[{'FutureSharePerformance': 'Negative'}] = [0.10, 0.20, 0.70]
+
+        ve_model.cpt(ve_model.idFromName('PERelative_ShareSector'))[{'FutureSharePerformance': 'Positive'}] = [0.70, 0.20, 0.10]
+        ve_model.cpt(ve_model.idFromName('PERelative_ShareSector'))[{'FutureSharePerformance': 'Stagnant'}] = [0.25, 0.50, 0.25]
+        ve_model.cpt(ve_model.idFromName('PERelative_ShareSector'))[{'FutureSharePerformance': 'Negative'}] = [0.10, 0.20, 0.70]
+
+        ve_model.cpt(ve_model.idFromName('ForwardPE_CurrentVsHistory'))[{'Expensive_E': 'Yes'}] = [[0.20, 0.30, 0.50], [0.20, 0.50, 0.30], [0.10, 0.17, 0.75]]
+        ve_model.cpt(ve_model.idFromName('ForwardPE_CurrentVsHistory'))[{'Expensive_E': 'No'}] = [[0.70, 0.20, 0.10], [0.15, 0.70, 0.15], [0.20, 0.60, 0.20]]
+
+    ie = gum.ShaferShenoyLIMIDInference(ve_model)
+    ie.addNoForgettingAssumption(['Expensive_E', 'ValueRelativeToPrice'])
+
+    if pe_relative_market_state == "cheap":
+        ie.addEvidence('PERelative_ShareMarket', [1, 0, 0])
+    elif pe_relative_market_state == "fairValue":
+        ie.addEvidence('PERelative_ShareMarket', [0, 1, 0])
+    else:
+        ie.addEvidence('PERelative_ShareMarket', [0, 0, 1])
+
+    if pe_relative_sector_state == "cheap":
+        ie.addEvidence('PERelative_ShareSector', [1, 0, 0])
+    elif pe_relative_sector_state == "fairValue":
+        ie.addEvidence('PERelative_ShareSector', [0, 1, 0])
+    else:
+        ie.addEvidence('PERelative_ShareSector', [0, 0, 1])
+
+    if forward_pe_current_vs_history_state == "cheap":
+        ie.addEvidence('ForwardPE_CurrentVsHistory', [1, 0, 0])
+    elif forward_pe_current_vs_history_state == "fairValue":
+        ie.addEvidence('ForwardPE_CurrentVsHistory', [0, 1, 0])
+    else:
+        ie.addEvidence('ForwardPE_CurrentVsHistory', [0, 0, 1])
+
+    if future_performance_state:
+        if future_performance_state == 1 or "positive":
+            ie.addEvidence('FutureSharePerformance', [0.8, 0.1, 0.1])
+        elif forward_pe_current_vs_history_state == 0 or "stagnant":
+            ie.addEvidence('FutureSharePerformance', [0.1, 0.2, 0.1])
+        else:
+            ie.addEvidence('FutureSharePerformance', [0.1, 0.1, 0.8])
+
+    ie.makeInference()
+    
+    var = ie.posteriorUtility('ValueRelativeToPrice').variable('ValueRelativeToPrice')
+    decision_index = np.argmax(ie.posteriorUtility('ValueRelativeToPrice').toarray())
+    decision = var.label(int(decision_index))
+
+    # Forced Decisions
+    if decision == 'Cheap':
+        pass
+    if decision == 'Expensive':
+        if pe_relative_market_state == "cheap" and pe_relative_sector_state == "expensive":
+            return 'FairValue'
+        elif pe_relative_market_state == "expensive" and pe_relative_sector_state == "cheap":
+            return 'FairValue'
+        elif pe_relative_market_state == "fairValue" and pe_relative_sector_state == "fairValue" and \
+                forward_pe_current_vs_history_state == "fairValue":
+            return 'FairValue'
+
+    return format(decision)
