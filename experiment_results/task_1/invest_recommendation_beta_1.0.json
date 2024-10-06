@@ -1,0 +1,54 @@
+{
+  "JGIND": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["AFRIMAT", "BARLOWORLD", "BIDVEST GROUP", "INVICTA", "NAMPAK", "RAUBEX GROUP", "REUNERT", "SUPER GROUP", "WLSN.BAYLY HOLMES-OVCON"],
+      "2016": ["BARLOWORLD", "MURRAY & ROBERTS", "NAMPAK", "RAUBEX GROUP"],
+      "2017": ["AFRIMAT", "BIDVEST GROUP", "KAP INDUSTRIAL", "MPACT", "NAMPAK", "RAUBEX GROUP", "REUNERT", "SUPER GROUP"]
+    },
+    "annualReturns": {
+      "IP.JGIND": [-7.48, 53.87, 16.01],
+      "Benchmark.JGIND": [-7.8, 15.99, 13.76]
+    },
+    "performanceMetrics": {
+      "IP.JGIND": {
+        "CR": 2.53,
+        "AAR": 20.80,
+        "Treynor Ratio": 0.10,
+        "Sharpe Ratio": 0.06
+      },
+      "Benchmark.JGIND": {
+        "CR": 6.96,
+        "AAR": 7.32,
+        "Treynor Ratio": 0.09,
+        "Sharpe Ratio": 0.35
+      }
+    }
+  },
+  "JCSEV": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["ADVTECH", "CITY LODGE HOTELS", "FAMOUS BRANDS", "MR PRICE GROUP", "SHOPRITE", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2016": ["CITY LODGE HOTELS", "CLICKS GROUP", "CASHBUILD", "FAMOUS BRANDS", "ITALTILE", "LEWIS GROUP", "MR PRICE GROUP", "PICK N PAY STORES", "SHOPRITE", "SPAR GROUP", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2017": ["CITY LODGE HOTELS", "CLICKS GROUP", "CASHBUILD", "FAMOUS BRANDS", "ITALTILE", "MR PRICE GROUP", "PICK N PAY STORES", "SHOPRITE", "SPAR GROUP", "SPUR", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"]
+    },
+    "annualReturns": {
+      "IP.JCSEV": [-8.2, 11.76, 15.43],
+      "Benchmark.JCSEV": [-4.15, -4.84, 11.48]
+    },
+    "performanceMetrics": {
+      "IP.JCSEV": {
+        "CR": 9.49,
+        "AAR": 6.33,
+        "Treynor Ratio": 0.25,
+        "Sharpe Ratio": 0.50
+      },
+      "Benchmark.JCSEV": {
+        "CR": 0.51,
+        "AAR": 0.83,
+        "Treynor Ratio": 0.01,
+        "Sharpe Ratio": 0.03
+      }
+    }
+  }
+}

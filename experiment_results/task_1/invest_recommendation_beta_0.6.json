@@ -1,0 +1,54 @@
+{
+  "JGIND": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["AFRIMAT", "INVICTA", "NAMPAK", "RAUBEX GROUP", "REUNERT", "SUPER GROUP", "WLSN.BAYLY HOLMES-OVCON"],
+      "2016": ["BARLOWORLD", "MURRAY & ROBERTS", "NAMPAK", "RAUBEX GROUP"],
+      "2017": ["AFRIMAT", "BIDVEST GROUP", "KAP INDUSTRIAL", "MPACT", "NAMPAK", "RAUBEX GROUP", "REUNERT", "SUPER GROUP"]
+    },
+    "annualReturns": {
+      "IP.JGIND": [-10.06, 53.87, 16.01],
+      "Benchmark.JGIND": [-7.8, 15.99, 13.76]
+    },
+    "performanceMetrics": {
+      "IP.JGIND": {
+        "CR": 6.86,
+        "AAR": 19.94,
+        "Treynor Ratio": 0.25,
+        "Sharpe Ratio": 0.15
+      },
+      "Benchmark.JGIND": {
+        "CR": 6.96,
+        "AAR": 7.32,
+        "Treynor Ratio": 0.09,
+        "Sharpe Ratio": 0.35
+      }
+    }
+  },
+  "JCSEV": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["ADVTECH", "CITY LODGE HOTELS", "FAMOUS BRANDS", "SPUR", "THE FOSCHINI GROUP", "TSOGO SUN"],
+      "2016": ["CITY LODGE HOTELS", "CLICKS GROUP", "CASHBUILD", "FAMOUS BRANDS", "ITALTILE", "LEWIS GROUP", "MR PRICE GROUP", "PICK N PAY STORES", "SHOPRITE", "SPAR GROUP", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2017": ["CITY LODGE HOTELS", "CASHBUILD", "FAMOUS BRANDS", "ITALTILE", "SPAR GROUP", "SPUR", "TSOGO SUN"]
+    },
+    "annualReturns": {
+      "IP.JCSEV": [-1.43, 11.76, 6.24],
+      "Benchmark.JCSEV": [-4.15, -4.84, 11.48]
+    },
+    "performanceMetrics": {
+      "IP.JCSEV": {
+        "CR": 14.30,
+        "AAR": 5.52,
+        "Treynor Ratio": 0.40,
+        "Sharpe Ratio": 1.42
+      },
+      "Benchmark.JCSEV": {
+        "CR": 0.51,
+        "AAR": 0.83,
+        "Treynor Ratio": 0.01,
+        "Sharpe Ratio": 0.03
+      }
+    }
+  }
+}

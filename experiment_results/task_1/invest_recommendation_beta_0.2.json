@@ -1,0 +1,54 @@
+{
+  "JGIND": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["AFRIMAT", "INVICTA"],
+      "2016": ["BARLOWORLD", "MURRAY & ROBERTS", "NAMPAK", "RAUBEX GROUP"],
+      "2017": ["KAP INDUSTRIAL"]
+    },
+    "annualReturns": {
+      "IP.JGIND": [-19.76, 53.87, 1.92],
+      "Benchmark.JGIND": [-7.8, 15.99, 13.76]
+    },
+    "performanceMetrics": {
+      "IP.JGIND": {
+        "CR": 13.33,
+        "AAR": 12.01,
+        "Treynor Ratio": 0.37,
+        "Sharpe Ratio": 0.25
+      },
+      "Benchmark.JGIND": {
+        "CR": 6.96,
+        "AAR": 7.32,
+        "Treynor Ratio": 0.09,
+        "Sharpe Ratio": 0.35
+      }
+    }
+  },
+  "JCSEV": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["ADVTECH", "CITY LODGE HOTELS"],
+      "2016": ["CITY LODGE HOTELS", "CLICKS GROUP", "CASHBUILD", "FAMOUS BRANDS", "ITALTILE", "LEWIS GROUP", "MR PRICE GROUP", "PICK N PAY STORES", "SHOPRITE", "SPAR GROUP", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2017": []
+    },
+    "annualReturns": {
+      "IP.JCSEV": [21.63, 11.76, 0],
+      "Benchmark.JCSEV": [-4.15, -4.84, 11.48]
+    },
+    "performanceMetrics": {
+      "IP.JCSEV": {
+        "CR": 37.55,
+        "AAR": 11.13,
+        "Treynor Ratio": 0.82,
+        "Sharpe Ratio": 2.58
+      },
+      "Benchmark.JCSEV": {
+        "CR": 0.51,
+        "AAR": 0.83,
+        "Treynor Ratio": 0.01,
+        "Sharpe Ratio": 0.03
+      }
+    }
+  }
+}
