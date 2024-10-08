@@ -156,6 +156,6 @@ def short_term_investment(price_momentum_state, volatility_state, valuation_stat
     var = ie.posteriorUtility('BuySignal').variable('BuySignal')
     decision_index = np.argmax(ie.posteriorUtility('BuySignal').toarray())
     decision = var.label(int(decision_index))
-    save_bdn_diagram(st_model)
+    save_bdn_diagram(st_model, filename="short_term_investment_bdn")
 
     return decision
