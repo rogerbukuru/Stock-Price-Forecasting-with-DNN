@@ -28,14 +28,16 @@ def investment_portfolio(df_, params, index_code, verbose=False, investment_hori
         Fundamental and price data
     params : argparse.Namespace
         Command line arguments
-    index_code: str,
+    index_code : str
         Johannesburg Stock Exchange sector index code
-    verbose: bool, optional
+    verbose : bool, optional
         Print output to console
+    investment_horizon : str, optional
+        Investment horizon ("long" or "short"), by default "long"
 
     Returns
     -------
-    portfolio: dict
+    portfolio : dict
     """
     if params.noise:
         df = simulate(df_)
@@ -54,23 +56,34 @@ def investment_portfolio(df_, params, index_code, verbose=False, investment_hori
         prices_initial[str(year)] = []
         prices_current[str(year)] = []
         betas[str(year)] = []
-        #if params.gnn:
-        #    df_future_performance = future_share_price_performance(year, horizon=params.horizon)
-        #else:
-        df_future_performance = pd.DataFrame()
+        
+        df_future_performance = pd.DataFrame()  # Placeholder for future performance data if available
+        
         for company in companies_dict[index_code]:
             if store.get_acceptable_stock(company):
-                if not df_future_performance.empty:
-                    future_performance = df_future_performance[company][0]
-                else:
-                    future_performance = None
-                if investment_decision(store, company, future_performance, params.extension, params.ablation,
-                                       params.network, investment_horizon) \
-                        == "Yes":
-                    mask = (df_['Date'] >= str(year) + '-01-01') & (
-                            df_['Date'] <= str(year) + '-12-31') & (df_['Name'] == company)
+                # Use future performance data if available
+                future_performance = df_future_performance[company][0] if not df_future_performance.empty else None
+                
+                # Get the decision based on investment horizon
+                decision = investment_decision(
+                    store, 
+                    company, 
+                    future_performance, 
+                    params.extension, 
+                    params.ablation,
+                    params.network, 
+                    investment_horizon
+                )
+                
+                # Define the expected decision for adding to the portfolio
+                expected_decision = "Buy" if investment_horizon == "short" else "Yes"
+                
+                if decision == expected_decision:
+                    # Filter the year's data for the specific company
+                    mask = (df_['Date'] >= f"{year}-01-01") & (df_['Date'] <= f"{year}-12-31") & (df_['Name'] == company)
                     df_year = df_[mask]
 
+                    # Add the company to the portfolio
                     investable_shares[str(year)].append(company)
                     prices_initial[str(year)].append(df_year.iloc[0]['Price'])
                     prices_current[str(year)].append(df_year.iloc[params.holding_period]['Price'])
@@ -83,16 +96,15 @@ def investment_portfolio(df_, params, index_code, verbose=False, investment_hori
         for year in range(params.start, params.end):
             print(year, "IP." + index_code, len(investable_shares[str(year)]), investable_shares[str(year)])
 
-    ip_ar, ip_cr, ip_aar, ip_treynor, ip_sharpe = validation.process_metrics(df_,
-                                                                             prices_initial,
-                                                                             prices_current,
-                                                                             betas,
-                                                                             params.start,
-                                                                             params.end,
-                                                                             index_code)
-    benchmark_ar, benchmark_cr, benchmark_aar, benchmark_treynor, benchmark_sharpe = \
-        validation.process_benchmark_metrics(params.start, params.end, index_code, params.holding_period)
+    # Calculate performance metrics
+    ip_ar, ip_cr, ip_aar, ip_treynor, ip_sharpe = validation.process_metrics(
+        df_, prices_initial, prices_current, betas, params.start, params.end, index_code
+    )
+    benchmark_ar, benchmark_cr, benchmark_aar, benchmark_treynor, benchmark_sharpe = validation.process_benchmark_metrics(
+        params.start, params.end, index_code, params.holding_period
+    )
 
+    # Return the portfolio
     portfolio = {
         "ip": {
             "shares": investable_shares,
@@ -163,6 +175,7 @@ def investment_decision(store, company, future_performance=None, extension=False
         volatility = store.get_volatility(company)
         valuation = store.get_valuation(company)
         market_condition = store.get_market_condition()
-        return short_term_investment(price_momentum, volatility, valuation, market_condition, value_decision, quality_decision)
+        final_decison = short_term_investment(price_momentum, volatility, valuation, market_condition, value_decision, quality_decision)
+        return final_decison
     else:            
      return investment_recommendation(value_decision, quality_decision)

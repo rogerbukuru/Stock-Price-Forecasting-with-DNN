@@ -259,7 +259,7 @@ class Store:
             # Short-term moving averages (e.g., 5-day and 15-day)
             short_ma = company_prices.rolling(window=5).mean().iloc[-1]
             long_ma = company_prices.rolling(window=15).mean().iloc[-1]
-
+          
             if short_ma > long_ma:
                 return "Uptrend"
             elif short_ma < long_ma:
@@ -278,11 +278,11 @@ class Store:
 
             # Standard deviation over the last 10 days as a measure of volatility
             recent_volatility = company_prices.tail(10).std()
-
+    
             # Define thresholds based on observed volatility levels
-            if recent_volatility > 2:  # adjust threshold based on typical values
+            if recent_volatility > 500:  # adjust threshold based on typical values
                 return "High"
-            elif recent_volatility > 1:
+            elif recent_volatility > 100:
                 return "Medium"
             else:
                 return "Low"
@@ -319,8 +319,9 @@ class Store:
             # Calculate the equity risk premium
             risk_premium = market_rate_of_return - risk_free_rate_of_return
 
+
             # Define thresholds for market condition
-            if risk_premium > 0.02:  # adjust threshold based on typical values
+            if risk_premium > 2.5:  # adjust threshold based on typical values
                 return "Positive"
             elif risk_premium > 0:
                 return "Neutral"
