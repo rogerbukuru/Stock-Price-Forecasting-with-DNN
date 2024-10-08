@@ -9,6 +9,7 @@ from invest.networks.value_evaluation import value_network
 #from invest.prediction.main import future_share_price_performance
 from invest.preprocessing.simulation import simulate
 from invest.store import Store
+from invest.networks.short_term_investment import short_term_investment
 
 companies_jcsev = json.load(open('data/jcsev.json'))['names']
 companies_jgind = json.load(open('data/jgind.json'))['names']
@@ -16,7 +17,7 @@ companies = companies_jcsev + companies_jgind
 companies_dict = {"JCSEV": companies_jcsev, "JGIND": companies_jgind}
 
 
-def investment_portfolio(df_, params, index_code, verbose=False):
+def investment_portfolio(df_, params, index_code, verbose=False, investment_horizon="long"):
     """
     Decides the shares for inclusion in an investment portfolio using INVEST
     Bayesian networks. Computes performance metrics for the IP and benchmark index.
@@ -64,7 +65,7 @@ def investment_portfolio(df_, params, index_code, verbose=False):
                 else:
                     future_performance = None
                 if investment_decision(store, company, future_performance, params.extension, params.ablation,
-                                       params.network) \
+                                       params.network, investment_horizon) \
                         == "Yes":
                     mask = (df_['Date'] >= str(year) + '-01-01') & (
                             df_['Date'] <= str(year) + '-12-31') & (df_['Name'] == company)
@@ -112,7 +113,7 @@ def investment_portfolio(df_, params, index_code, verbose=False):
     return portfolio
 
 
-def investment_decision(store, company, future_performance=None, extension=False, ablation=False, network='v'):
+def investment_decision(store, company, future_performance=None, extension=False, ablation=False, network='v', investment_horizon='long'):
     """
     Returns an investment decision for shares of the specified company
 
@@ -157,4 +158,11 @@ def investment_decision(store, company, future_performance=None, extension=False
             return "Yes"
         else:
             return "No"
-    return investment_recommendation(value_decision, quality_decision)
+    if investment_horizon == "short":
+        price_momentum = store.get_price_momentum(company)
+        volatility = store.get_volatility(company)
+        valuation = store.get_valuation(company)
+        market_condition = store.get_market_condition()
+        return short_term_investment(price_momentum, volatility, valuation, market_condition, value_decision, quality_decision)
+    else:            
+     return investment_recommendation(value_decision, quality_decision)

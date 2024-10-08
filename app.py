@@ -14,8 +14,9 @@ VERSION = 1.0
 def main():
     start = time.time()
     df_ = load_data()
-    jgind_portfolio = investment_portfolio(df_, args, "JGIND", True)
-    jcsev_portfolio = investment_portfolio(df_, args, "JCSEV", True)
+    investment_horizon = "short"
+    jgind_portfolio = investment_portfolio(df_, args, "JGIND", True, investment_horizon)
+    jcsev_portfolio = investment_portfolio(df_, args, "JCSEV", True, investment_horizon)
     end = time.time()
 
     jgind_metrics_ = list(jgind_portfolio["ip"].values())[2::]

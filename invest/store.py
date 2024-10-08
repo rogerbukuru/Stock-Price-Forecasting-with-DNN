@@ -245,3 +245,84 @@ class Store:
         Returns the Systematic Risk discrete state for the given company
         """
         return self.df_shares.loc[self.df_shares['company_name'] == company, "systematic_risk"].iloc[0]
+
+   # Short Term Decision Making Metrics
+    def get_price_momentum(self, company):
+            """
+            Calculates price momentum based on a short-term moving average.
+            
+            Returns 'Uptrend', 'Stable', or 'Downtrend'.
+            """
+            mask_price = (self.df_main['Name'] == company) & (self.df_main['Date'] >= str(self.years - 1) + '-01-01')
+            company_prices = self.df_main.loc[mask_price, 'Price']
+
+            # Short-term moving averages (e.g., 5-day and 15-day)
+            short_ma = company_prices.rolling(window=5).mean().iloc[-1]
+            long_ma = company_prices.rolling(window=15).mean().iloc[-1]
+
+            if short_ma > long_ma:
+                return "Uptrend"
+            elif short_ma < long_ma:
+                return "Downtrend"
+            else:
+                return "Stable"
+
+    def get_volatility(self, company):
+            """
+            Calculates volatility based on the standard deviation of recent daily Close Prices.
+            
+            Returns 'High', 'Medium', or 'Low' based on standard deviation thresholds.
+            """
+            mask_price = (self.df_main['Name'] == company) & (self.df_main['Date'] >= str(self.years - 1) + '-01-01')
+            company_prices = self.df_main.loc[mask_price, 'Price']
+
+            # Standard deviation over the last 10 days as a measure of volatility
+            recent_volatility = company_prices.tail(10).std()
+
+            # Define thresholds based on observed volatility levels
+            if recent_volatility > 2:  # adjust threshold based on typical values
+                return "High"
+            elif recent_volatility > 1:
+                return "Medium"
+            else:
+                return "Low"
+
+    def get_valuation(self, company):
+        """
+        Determines valuation by comparing PE ratio to Market and Sector PEs.
+        
+        Returns 'Undervalued', 'FairlyValued', or 'Overvalued'.
+        """
+        current_pe = self.df_main.loc[(self.df_main['Name'] == company) & 
+                                    (self.df_main['Date'].str.contains(str(self.years))), 'PE'].iloc[-1]
+        pe_market = self.df_main.loc[(self.df_main['Name'] == company) & 
+                                    (self.df_main['Date'].str.contains(str(self.years))), 'PEMarket'].iloc[-1]
+        pe_sector = self.df_main.loc[(self.df_main['Name'] == company) & 
+                                    (self.df_main['Date'].str.contains(str(self.years))), 'PESector'].iloc[-1]
+
+        if current_pe < pe_market and current_pe < pe_sector:
+            return "Undervalued"
+        elif current_pe > pe_market and current_pe > pe_sector:
+            return "Overvalued"
+        else:
+            return "FairlyValued"
+
+    def get_market_condition(self):
+            """
+            Assesses the overall market condition by calculating the equity risk premium.
+            
+            Returns 'Positive', 'Neutral', or 'Negative' based on the risk premium.
+            """
+            market_rate_of_return = self.df_main.loc[self.df_main['Date'].str.contains(str(self.years)), 'MarketRateOfReturn'].iloc[-1]
+            risk_free_rate_of_return = self.df_main.loc[self.df_main['Date'].str.contains(str(self.years)), 'RiskFreeRateOfReturn'].iloc[-1]
+
+            # Calculate the equity risk premium
+            risk_premium = market_rate_of_return - risk_free_rate_of_return
+
+            # Define thresholds for market condition
+            if risk_premium > 0.02:  # adjust threshold based on typical values
+                return "Positive"
+            elif risk_premium > 0:
+                return "Neutral"
+            else:
+                return "Negative"     
