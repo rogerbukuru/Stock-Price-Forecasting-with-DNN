@@ -7,5 +7,5 @@
 
 # How to execute the Short-Term Investment Network
 
-In the `app.py` we have introduced a new variable called `investment_horizon` this variable takes the value "short" or "long".
- - In order to execute the short-term investment Bayesian Decision Network (BDN) set this to "short" otherwise set it to long for the defualt system setup.
+In the `app.py` we have introduced a new variable called `investment_horizon` this variable takes the values `short` or `long`.
+ - In order to execute the short-term investment Bayesian Decision Network (BDN) set this to `short` otherwise set it to `long` for the default system setup.
