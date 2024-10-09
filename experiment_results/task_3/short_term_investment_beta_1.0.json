@@ -1,0 +1,54 @@
+{
+  "JGIND": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["AFRIMAT", "BARLOWORLD", "GRINDROD", "INVICTA", "MPACT", "MURRAY & ROBERTS", "NAMPAK", "PPC", "RAUBEX GROUP", "REUNERT", "SUPER GROUP", "TRENCOR", "WLSN.BAYLY HOLMES-OVCON"],
+      "2016": ["AFRIMAT", "BARLOWORLD", "BIDVEST GROUP", "GRINDROD", "HUDACO", "IMPERIAL", "INVICTA", "KAP INDUSTRIAL", "MPACT", "MURRAY & ROBERTS", "NAMPAK", "PPC", "RAUBEX GROUP", "REUNERT", "SUPER GROUP", "TRENCOR"],
+      "2017": ["AFRIMAT", "BIDVEST GROUP", "HUDACO", "KAP INDUSTRIAL", "MPACT", "NAMPAK", "RAUBEX GROUP", "REUNERT", "SUPER GROUP"]
+    },
+    "annualReturns": {
+      "IP.JGIND": [-16.44, -3.77, 18.31],
+      "Benchmark.JGIND": [-7.8, 15.99, 13.76]
+    },
+    "performanceMetrics": {
+      "IP.JGIND": {
+        "CR": -2.79,
+        "AAR": -0.63,
+        "Treynor Ratio": -0.11,
+        "Sharpe Ratio": -0.11
+      },
+      "Benchmark.JGIND": {
+        "CR": 6.96,
+        "AAR": 7.32,
+        "Treynor Ratio": 0.09,
+        "Sharpe Ratio": 0.35
+      }
+    }
+  },
+  "JCSEV": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["CITY LODGE HOTELS", "ITALTILE", "LEWIS GROUP", "SHOPRITE", "SUN INTERNATIONAL", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2016": ["CITY LODGE HOTELS", "CLICKS GROUP", "FAMOUS BRANDS", "ITALTILE", "LEWIS GROUP", "MR PRICE GROUP", "SHOPRITE", "SPAR GROUP", "SUN INTERNATIONAL", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2017": ["CITY LODGE HOTELS", "CLICKS GROUP", "CASHBUILD", "ITALTILE", "LEWIS GROUP", "MR PRICE GROUP", "PICK N PAY STORES", "SHOPRITE", "SPAR GROUP", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"]
+    },
+    "annualReturns": {
+      "IP.JCSEV": [-13.05, 9.05, 19.64],
+      "Benchmark.JCSEV": [-4.15, -4.84, 11.48]
+    },
+    "performanceMetrics": {
+      "IP.JCSEV": {
+        "CR": 10.03,
+        "AAR": 5.21,
+        "Treynor Ratio": 0.27,
+        "Sharpe Ratio": 0.41
+      },
+      "Benchmark.JCSEV": {
+        "CR": 0.51,
+        "AAR": 0.83,
+        "Treynor Ratio": 0.01,
+        "Sharpe Ratio": 0.03
+      }
+    }
+  }
+}

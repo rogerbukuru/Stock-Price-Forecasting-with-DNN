@@ -99,6 +99,8 @@ def short_term_investment(price_momentum_state, volatility_state, valuation_stat
     st_model.addArc(st_model.idFromName('Performance'), st_model.idFromName('Valuation'))
 
     st_model.addArc(st_model.idFromName('MarketCondition'), st_model.idFromName('Volatility'))
+    st_model.addArc(st_model.idFromName('MarketCondition'), st_model.idFromName('PriceMomentum'))
+
 
     # Performance node (independent probabilities)
     st_model.cpt(st_model.idFromName('Performance'))[0] = 1 / 3  # Positive
@@ -125,10 +127,10 @@ def short_term_investment(price_momentum_state, volatility_state, valuation_stat
     st_model.cpt(st_model.idFromName('Volatility'))[{'MarketCondition': 'Neutral'}] = [0.30, 0.50, 0.20]
     st_model.cpt(st_model.idFromName('Volatility'))[{'MarketCondition': 'Negative'}] = [0.10, 0.30, 0.60]
 
-    # PriceMomentum node (independent probabilities)
-    st_model.cpt(st_model.idFromName('PriceMomentum'))[0] = 1 / 3  # Uptrend
-    st_model.cpt(st_model.idFromName('PriceMomentum'))[1] = 1 / 3  # Stable
-    st_model.cpt(st_model.idFromName('PriceMomentum'))[2] = 1 / 3  # Downtrend
+    # PriceMomentum node, influenced by MarketCondition
+    st_model.cpt(st_model.idFromName('PriceMomentum'))[{'MarketCondition': 'Positive'}] = [0.60, 0.30, 0.10]
+    st_model.cpt(st_model.idFromName('PriceMomentum'))[{'MarketCondition': 'Neutral'}] = [0.30, 0.50, 0.20]
+    st_model.cpt(st_model.idFromName('PriceMomentum'))[{'MarketCondition': 'Negative'}] = [0.10, 0.30, 0.60]
 
     # MarketCondition node (independent probabilities)
     st_model.cpt(st_model.idFromName('MarketCondition'))[0] = 1 / 3  # Positive
