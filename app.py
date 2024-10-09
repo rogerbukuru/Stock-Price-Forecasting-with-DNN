@@ -14,7 +14,7 @@ VERSION = 1.0
 def main():
     start = time.time()
     df_ = load_data()
-    investment_horizon = "short"
+    investment_horizon = "short" # change to "long" for the default INVEST setup
     jgind_portfolio = investment_portfolio(df_, args, "JGIND", True, investment_horizon)
     jcsev_portfolio = investment_portfolio(df_, args, "JCSEV", True, investment_horizon)
     end = time.time()
