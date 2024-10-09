@@ -280,7 +280,7 @@ class Store:
             recent_volatility = company_prices.tail(10).std()
     
             # Define thresholds based on observed volatility levels
-            if recent_volatility > 500:  # adjust threshold based on typical values
+            if recent_volatility > 500:
                 return "High"
             elif recent_volatility > 100:
                 return "Medium"
@@ -321,7 +321,7 @@ class Store:
 
 
             # Define thresholds for market condition
-            if risk_premium > 2.5:  # adjust threshold based on typical values
+            if risk_premium > 2.5:
                 return "Positive"
             elif risk_premium > 0:
                 return "Neutral"
