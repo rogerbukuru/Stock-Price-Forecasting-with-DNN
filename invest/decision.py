@@ -56,8 +56,12 @@ def investment_portfolio(df_, params, index_code, verbose=False, investment_hori
         prices_initial[str(year)] = []
         prices_current[str(year)] = []
         betas[str(year)] = []
-        
-        df_future_performance = pd.DataFrame()  # Placeholder for future performance data if available
+
+        if params.gnn:
+            print("No GNN model available")
+            #df_future_performance = future_share_price_performance(year, horizon=params.horizon)
+        else:    
+            df_future_performance = pd.DataFrame()  # Placeholder for future performance data if available
         
         for company in companies_dict[index_code]:
             if store.get_acceptable_stock(company):
