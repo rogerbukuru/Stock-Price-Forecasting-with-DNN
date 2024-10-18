@@ -9,6 +9,7 @@ from walk_forward_validation import create_datasets
 from walk_forward_validation import create_dataloaders
 from tqdm import tqdm
 import time
+from prediction_model import GraphWaveNet
 
 
 class ContinualLearningPipeline:
@@ -200,18 +201,11 @@ class ContinualLearningPipeline:
     def root_mean_square_error(self,y_pred, y_true):
         return torch.sqrt(torch.mean((y_true - y_pred) ** 2)).item()
 
-# Example Usage
-class GraphWaveNet(nn.Module):
-    def __init__(self):
-        super(GraphWaveNet, self).__init__()
-        self.layer = nn.Linear(10, 1)
-    
-    def forward(self, x):
-        return self.layer(x)
 
-model = GraphWaveNet()
+model = GraphWaveNet(input_size =  1, hidden_size = 64 , output_size = 30, num_nodes = 30, dropout_rate=0.2)
 pipeline = ContinualLearningPipeline(model)
 
 # Example new data
-new_data = np.random.randn(64, 11)  # Random data: 64 samples, 10 features + 1 target
-pipeline.continual_learning_step(new_data)
+data = pd.read_csv("JSE_clean_truncated.csv")
+data.shape # 3146 daily closing prices for 30 stocks
+pipeline.continual_learning_step(data)
