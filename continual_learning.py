@@ -7,13 +7,13 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 from tqdm import tqdm
 import time
-from prediction_model import GraphWaveNet
+from situation_analysis.prediction_model import GraphWaveNet
 from monitor.walk_forward_validation import create_datasets
 from monitor.walk_forward_validation import create_dataloaders
 
 
 class ContinualLearningPipeline:
-    def __init__(self, model, buffer_size=1000, batch_size=32, lr=0.01, drift_threshold=0.05, max_training_runs=3):
+    def __init__(self, model, val_loss, test_loss, buffer_size=1000, batch_size=32, lr=0.01, drift_threshold=0.05, max_training_runs=3):
         self.model = model
         self.buffer_size = buffer_size
         self.batch_size = batch_size
@@ -27,6 +27,8 @@ class ContinualLearningPipeline:
         self.train_loader = None
         self.val_loader = None
         self.test_loader = None
+        self.current_val_loss = val_loss
+        self.current_test_loss = test_loss
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=5, verbose=True)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -52,7 +54,7 @@ class ContinualLearningPipeline:
         window_sizes       = [30, 60, 120]
         horizons           = [1, 2, 5, 10, 30]
         datasets           = create_datasets(data = data_normalized, window_sizes=window_sizes, horizons=horizons)
-        dataloaders        = create_dataloaders(datasets, batch_size = 32, window_size = 30, horizon = 10)
+        dataloaders        = create_dataloaders(datasets, batch_size = 32, window_size = 60, horizon = 10)
         selected_key       = (30, 10)
        
         
@@ -67,13 +69,13 @@ class ContinualLearningPipeline:
         # Call GWN Training 
         for _ in range(self.max_training_runs):
             if self.val_loader is not None:
-                train_loss, val_loss = self.train(self.epochs)
-                self.validation_loss_history.append(val_loss / len(self.val_loader))
+                train_loss, new_val_loss = self.train(self.epochs)
+                #self.validation_loss_history.append(val_loss / len(self.val_loader))
                 # Stop training if validation loss is consistent
-                if len(self.validation_loss_history) > 1:
-                    loss_drift = self.calculate_drift()
-                    if loss_drift < self.drift_threshold:
-                        break
+                #if len(self.validation_loss_history) > 1:
+                loss_drift = self.calculate_drift(new_val_loss, self.current_val_loss)
+                if loss_drift < self.drift_threshold:
+                    break
         return self.model
 
     def train(self, epochs):
@@ -137,13 +139,13 @@ class ContinualLearningPipeline:
             avg_valid_rmse = valid_rmse / valid_batches
         return avg_valid_loss
 
-    def calculate_drift(self):
+    def calculate_drift(self, new_loss, old_loss):
         """
         Calculate the drift in validation loss over time.
         """
-        if len(self.validation_loss_history) < 2:
-            return 0.0
-        return abs(self.validation_loss_history[-1] - self.validation_loss_history[-2]) / self.validation_loss_history[-2]
+        #if len(self.validation_loss_history) < 2:
+        #    return float('-inf')
+        return abs(new_loss - old_loss) / old_loss
 
     def model_stability_test(self, model):
         """
@@ -174,7 +176,7 @@ class ContinualLearningPipeline:
         
         # Step 3: Run model stability test
         test_loss = self.model_stability_test(updated_model)
-        if self.calculate_drift() > self.drift_threshold:
+        if self.calculate_drift(test_loss, self.current_test_loss) > self.drift_threshold:
             # Proceed to use the updated model if stability consistent
             return updated_model
         else:
@@ -211,32 +213,32 @@ def load_model(model_file_path, device):
     checkpoint = torch.load(model_file_path, map_location=device)
     
     # Extract the model architecture parameters from the checkpoint
-    input_size = checkpoint['input_size']
-    hidden_size = checkpoint['hidden_size']
-    output_size = checkpoint['output_size']
-    num_nodes = checkpoint['num_nodes']
-    dropout_rate = checkpoint['dropout_rate']
+    optimizer_state_dict   = checkpoint['optimizer_state_dict']
+    best_val_loss          = checkpoint['best_val_loss']
+    test_loss              = 0.0413
+
     
     # Instantiate the model with the saved architecture
-    model = GraphWaveNet(input_size=input_size, hidden_size=hidden_size, output_size=output_size, num_nodes=num_nodes, dropout_rate=dropout_rate)
+    model = GraphWaveNet(input_size=30, hidden_size=128, output_size=30, num_nodes=60, dropout_rate=0.2)
     
     # Load the model state (weights)
-    model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(checkpoint['model_state_dict'])
     
     # Move the model to the specified device (CPU or GPU)
     model.to(device)
     
     print(f"Model successfully loaded from {model_file_path}")
     
-    return model
+    return model, best_val_loss, test_loss
 
-model_file_path = 'best_models/model_window60_horizon10.pth'
+model_file_path = 'situation_analysis/best_models/model_window60_horizon10.pth'
 device          = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model           = load_model(model_file_path, device)
-pipeline        = ContinualLearningPipeline(model)
+model, val_loss, test_loss   = load_model(model_file_path, device)
+pipeline        = ContinualLearningPipeline(model, val_loss, test_loss)
 
 
 # Example new data
-#data = pd.read_csv("JSE_clean_truncated.csv")
-#data.shape # 3146 daily closing prices for 30 stocks
-#pipeline.continual_learning_step(data)
+data = pd.read_csv("data/JSE_clean_truncated.csv")
+data.shape # 3146 daily closing prices for 30 stocks
+data = data.head(1000)
+pipeline.continual_learning_step(data)

@@ -7,8 +7,6 @@ import pandas as pd
 from tqdm import tqdm
 import os
 import itertools
-import logging
-from datetime import datetime
 
 # Set random seed for reproducibility
 seed = 42
@@ -18,16 +16,6 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed_all(seed)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-# Set up logging
-log_dir = 'logs'
-os.makedirs(log_dir, exist_ok=True)
-log_file = os.path.join(log_dir, f'training_log_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt')
-logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(message)s')
-
-def log_info(message):
-    print(message)
-    logging.info(message)
 
 def load_and_preprocess_data(file_path):
     data = pd.read_csv(file_path)
@@ -132,8 +120,6 @@ def run_continuous_learning_component(data_path, input_window, prediction_horizo
     y_train = torch.FloatTensor(y_train).to(device)
     X_val = torch.FloatTensor(X_val).to(device)
     y_val = torch.FloatTensor(y_val).to(device)
-    X_test = torch.FloatTensor(X_test).to(device)
-    y_test = torch.FloatTensor(y_test).to(device)
     
     model = ContinualLearningModel(
         input_size=X_train.shape[2],
@@ -150,35 +136,25 @@ def run_continuous_learning_component(data_path, input_window, prediction_horizo
         if val_loss < best_val_loss:
             best_val_loss = val_loss
         if epoch % 10 == 0:
-            log_info(f"Epoch {epoch}: Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
+            print(f"Epoch {epoch}: Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
     
-    # Compute test loss
-    test_loss = model.validate(X_test, y_test)
-    log_info(f"Final Test Loss: {test_loss:.4f}")
-    
-    return best_val_loss, test_loss, model
+    return best_val_loss, model
 
 def train_multiple_models(data_path, input_windows, prediction_horizons, hidden_sizes, learning_rates, dropout_rates, epochs):
-    # Ensure the best_models directory exists
-    try:
-        os.makedirs('best_models', exist_ok=True)
-        log_info("Created or confirmed existence of 'best_models' directory")
-    except Exception as e:
-        log_info(f"Error creating 'best_models' directory: {str(e)}")
-        raise
-
+    # Create the best_models directory if it doesn't exist
+    os.makedirs('best_models', exist_ok=True)
+    
     best_models = {}
     
     for input_window, prediction_horizon in itertools.product(input_windows, prediction_horizons):
-        log_info(f"\nTuning hyperparameters for Input Window: {input_window}, Prediction Horizon: {prediction_horizon}")
+        print(f"\nTuning hyperparameters for Input Window: {input_window}, Prediction Horizon: {prediction_horizon}")
         
         best_val_loss = float('inf')
-        best_test_loss = float('inf')
         best_params = None
         best_model = None
         
         for hidden_size, learning_rate, dropout_rate in itertools.product(hidden_sizes, learning_rates, dropout_rates):
-            val_loss, test_loss, model = run_continuous_learning_component(
+            val_loss, model = run_continuous_learning_component(
                 data_path=data_path,
                 input_window=input_window,
                 prediction_horizon=prediction_horizon,
@@ -188,32 +164,22 @@ def train_multiple_models(data_path, input_windows, prediction_horizons, hidden_
                 epochs=epochs
             )
             
-            log_info(f"Parameters - Hidden Size: {hidden_size}, Learning Rate: {learning_rate}, Dropout Rate: {dropout_rate}")
-            log_info(f"Validation Loss: {val_loss:.4f}, Test Loss: {test_loss:.4f}")
-            
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
-                best_test_loss = test_loss
                 best_params = (hidden_size, learning_rate, dropout_rate)
                 best_model = model
         
-        log_info(f"Best parameters for Window: {input_window}, Horizon: {prediction_horizon}")
-        log_info(f"Hidden Size: {best_params[0]}, Learning Rate: {best_params[1]}, Dropout Rate: {best_params[2]}")
-        log_info(f"Best Validation Loss: {best_val_loss:.4f}")
-        log_info(f"Corresponding Test Loss: {best_test_loss:.4f}")
+        print(f"Best parameters for Window: {input_window}, Horizon: {prediction_horizon}")
+        print(f"Hidden Size: {best_params[0]}, Learning Rate: {best_params[1]}, Dropout Rate: {best_params[2]}")
+        print(f"Best Validation Loss: {best_val_loss:.4f}")
         
         model_path = f'best_models/model_window{input_window}_horizon{prediction_horizon}.pth'
-        try:
-            best_model.save_model(model_path)
-            log_info(f"Best model saved to {model_path}")
-        except Exception as e:
-            log_info(f"Error saving model to {model_path}: {str(e)}")
-            raise
+        best_model.save_model(model_path)
+        print(f"Best model saved to {model_path}")
         
         best_models[(input_window, prediction_horizon)] = {
             'params': best_params,
             'val_loss': best_val_loss,
-            'test_loss': best_test_loss,
             'model_path': model_path
         }
     
@@ -231,13 +197,10 @@ if __name__ == "__main__":
     )
     
     # Print summary of best models
-    log_info("\nSummary of Best Models:")
+    print("\nSummary of Best Models:")
     for (input_window, prediction_horizon), model_info in best_models.items():
-        log_info(f"Window: {input_window}, Horizon: {prediction_horizon}")
-        log_info(f"Best Parameters: Hidden Size: {model_info['params'][0]}, Learning Rate: {model_info['params'][1]}, Dropout Rate: {model_info['params'][2]}")
-        log_info(f"Best Validation Loss: {model_info['val_loss']:.4f}")
-        log_info(f"Corresponding Test Loss: {model_info['test_loss']:.4f}")
-        log_info(f"Model saved at: {model_info['model_path']}")
-        log_info("")
-
-log_info(f"Log file created at: {log_file}")
+        print(f"Window: {input_window}, Horizon: {prediction_horizon}")
+        print(f"Best Parameters: Hidden Size: {model_info['params'][0]}, Learning Rate: {model_info['params'][1]}, Dropout Rate: {model_info['params'][2]}")
+        print(f"Best Validation Loss: {model_info['val_loss']:.4f}")
+        print(f"Model saved at: {model_info['model_path']}")
+        print()
