@@ -123,7 +123,7 @@ def create_datasets(data, window_sizes, horizons, stocks=None):
           for stock in stocks:
             x, y = create_sequences(data, window_size, horizon, stock)
             datasets[(window_size, horizon, stock)] = {'x': x, 'y': y}
-            print(f"Dataset for stock {stock}, window size {window_size} and horizon {horizon} created.")
+            #print(f"Dataset for stock {stock}, window size {window_size} and horizon {horizon} created.")
 
 
   for key in datasets.keys():
@@ -135,5 +135,5 @@ def create_datasets(data, window_sizes, horizons, stocks=None):
       datasets[key]['test'] = {'x': X_test, 'y': y_test}
       del datasets[key]['x']
       del datasets[key]['y']
-      print(f" - Split into Train: {X_train.shape}, Val: {X_val.shape}, Test: {X_test.shape}")
+      #print(f" - Split into Train: {X_train.shape}, Val: {X_val.shape}, Test: {X_test.shape}")
   return datasets
