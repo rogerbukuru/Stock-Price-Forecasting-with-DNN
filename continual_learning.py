@@ -8,8 +8,9 @@ import pandas as pd
 from tqdm import tqdm
 import time
 from situation_analysis.prediction_model import GraphWaveNet
-from monitor.walk_forward_validation import create_datasets
-from monitor.walk_forward_validation import create_dataloaders
+from monitor.data_processor import create_datasets
+from monitor.data_processor import create_dataloaders
+from monitor.data_processor import create_datasets_with_walk_forward
 import copy
 import time
 
@@ -59,9 +60,10 @@ class ContinualLearningPipeline:
         stocks             = data_normalized.columns.tolist()
         window_sizes       = [30, 60, 120]
         horizons           = [1, 2, 5, 10, 30]
-        datasets           = create_datasets(data = data_normalized, window_sizes=window_sizes, horizons=horizons)
-        dataloaders        = create_dataloaders(datasets, batch_size = 32, window_size = 60, horizon = 10)
-        selected_key       = (60, 10)
+        # use walk-forward validation to create datasets
+        datasets           = create_datasets_with_walk_forward(data=data_normalized, window_sizes=window_sizes, horizons=horizons)
+        dataloaders        = create_dataloaders(datasets, batch_size = 32, window_size = 60, horizon = 10, step=0)
+        selected_key       = (60, 10, 'step_0')
        
         
         self.train_loader = dataloaders[selected_key]['train']
