@@ -13,6 +13,8 @@ from monitor.data_processor import create_dataloaders
 from monitor.data_processor import create_datasets_with_walk_forward
 import copy
 import time
+from invest.preprocessing.simulation import simulate
+
 
 
 class ContinualLearningPipeline:
@@ -40,8 +42,7 @@ class ContinualLearningPipeline:
         self.criterion = nn.L1Loss()  # Default criterion (MAE)
         self.epochs    = 100
 
-
-    def add_to_buffer(self, new_data):
+    def add_to_buffer(self, new_data, walk_forward_step):
         """
         Add new data to the buffer and remove old data if the buffer exceeds buffer_size.
         """
@@ -62,10 +63,10 @@ class ContinualLearningPipeline:
         horizons           = [1, 2, 5, 10, 30]
         # use walk-forward validation to create datasets
         datasets           = create_datasets_with_walk_forward(data=data_normalized, window_sizes=window_sizes, horizons=horizons)
-        dataloaders        = create_dataloaders(datasets, batch_size = 32, window_size = 60, horizon = 10, step=0)
-        selected_key       = (60, 10, 'step_0')
+        dataloaders        = create_dataloaders(datasets, batch_size = 32, window_size = 60, horizon = 10, step=walk_forward_step)
+        selected_key       = (60, 10, f'step_{walk_forward_step}')
        
-        
+        print(f"Walk forward step: {walk_forward_step}")
         self.train_loader = dataloaders[selected_key]['train']
         self.val_loader   = dataloaders[selected_key]['val']
         self.test_loader  = dataloaders[selected_key]['test']
@@ -195,12 +196,12 @@ class ContinualLearningPipeline:
         
         return sum(test_losses) / len(test_losses)
     
-    def continual_learning_step(self, new_data):
+    def continual_learning_step(self, new_data, walk_forward_step):
         """
         Execute a single continual learning step.
         """
         # Step 1: Add new data to buffer
-        self.add_to_buffer(new_data)
+        self.add_to_buffer(new_data, walk_forward_step)
         model_path = f'situation_analysis/updated_model/model_window60_horizon10.pth'
         
         # Step 2: Warm start training on updated buffer
@@ -292,6 +293,11 @@ pipeline                     = ContinualLearningPipeline(model, val_loss, test_l
 
 # Example new data
 data = pd.read_csv("data/JSE_clean_truncated.csv")
+print("Applying noise to the new data")
 print(data.shape) # 3146 daily closing prices for 30 stocks
-#data = data.head(1000) # minumum data points required 500
-pipeline.continual_learning_step(data)
+
+
+for i in range(2): # simulate for 5 days
+    new_data = simulate(data, frac=0.5, scale=1, method='std')
+    #data = data.head(1000) # minumum data points required 500
+    pipeline.continual_learning_step(new_data, walk_forward_step = i)
