@@ -121,8 +121,8 @@ class DataValidator:
             return False, f"Preprocessing error: {str(e)}"
 
 class StockPredictor:
-    def __init__(self, model_path='best_models/model_window30_horizon1.pth', 
-                 train_data_path='../data/INVEST_GNN_clean.csv'):
+    def __init__(self, model_path='situation_analysis/best_models/model_window30_horizon1.pth',  #'best_models/model_window30_horizon1.pth'
+                 train_data_path='data/INVEST_GNN_clean.csv'): #../data/INVEST_GNN_clean.csv
         try:
             self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             logger.info(f"Using device: {self.device}")
@@ -455,7 +455,7 @@ def get_stock_predictions(data_path):
 
 if __name__ == "__main__":
     try:
-        data_path = '../data/INVEST_GNN_clean.csv'
+        data_path = 'data/INVEST_GNN_clean.csv' #../data/INVEST_GNN_clean.csv
         predictions, detailed_results, predictions_path = get_stock_predictions(data_path)
         
         if predictions is not None:

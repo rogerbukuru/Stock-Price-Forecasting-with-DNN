@@ -10,6 +10,7 @@ from invest.networks.value_evaluation import value_network
 from invest.preprocessing.simulation import simulate
 from invest.store import Store
 from invest.networks.short_term_investment import short_term_investment
+from situation_analysis.stock_predictor import get_stock_predictions
 
 companies_jcsev = json.load(open('data/jcsev.json'))['names']
 companies_jgind = json.load(open('data/jgind.json'))['names']
@@ -60,13 +61,15 @@ def investment_portfolio(df_, params, index_code, verbose=False, investment_hori
         if params.gnn:
             print("No GNN model available")
             #df_future_performance = future_share_price_performance(year, horizon=params.horizon)
+            df_future_performance, detailed_results, predictions_path = get_stock_predictions('data/INVEST_GNN_clean.csv')
         else:    
             df_future_performance = pd.DataFrame()  # Placeholder for future performance data if available
         
         for company in companies_dict[index_code]:
             if store.get_acceptable_stock(company):
                 # Use future performance data if available
-                future_performance = df_future_performance[company][0] if not df_future_performance.empty else None
+                if df_future_performance is not None:
+                 future_performance = df_future_performance[company][0] if not df_future_performance.empty else None
                 
                 # Get the decision based on investment horizon
                 decision = investment_decision(
