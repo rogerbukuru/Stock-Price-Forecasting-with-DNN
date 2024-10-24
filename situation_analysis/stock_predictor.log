@@ -1,0 +1,17 @@
+2024-10-24 15:24:09,349 - INFO - Using device: cpu
+2024-10-24 15:24:09,349 - INFO - Extracting model configuration...
+2024-10-24 15:24:09,374 - INFO - Model configuration extracted:
+2024-10-24 15:24:09,375 - INFO - model_path: best_models/model_window30_horizon1.pth
+2024-10-24 15:24:09,375 - INFO - num_nodes: 30
+2024-10-24 15:24:09,375 - INFO - hidden_size: 128
+2024-10-24 15:24:09,376 - INFO - dropout_rate: 0.1
+2024-10-24 15:24:09,376 - INFO - window_size: 30
+2024-10-24 15:24:09,376 - INFO - prediction_horizon: 1
+2024-10-24 15:24:09,377 - INFO - learning_rate: 0.01
+2024-10-24 15:24:09,377 - INFO - Loading training data...
+2024-10-24 15:24:09,438 - INFO - Initializing model...
+2024-10-24 15:24:09,516 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-24 15:24:09,521 - INFO - Output shape: torch.Size([1, 36])
+2024-10-24 15:24:34,756 - INFO - Prediction plot saved to prediction_plots/predictions_20241024_152419.png
+2024-10-24 15:24:34,764 - INFO - Prediction successful
+2024-10-24 15:24:34,769 - INFO - Predictions saved to predictions/predictions_20241024_1524.csv

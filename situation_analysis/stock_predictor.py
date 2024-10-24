@@ -18,50 +18,58 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Best model parameters from training
-MODEL_PARAMS = {
-    'input_window': 60,
-    'prediction_horizon': 10,
-    'hidden_size': 128,
-    'learning_rate': 0.01,
-    'dropout_rate': 0.2,
-    'num_nodes': 60
-}
-
 class GraphConvLayer(torch.nn.Module):
     def __init__(self, in_features, out_features):
         super(GraphConvLayer, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
         self.fc = torch.nn.Linear(in_features, out_features)
 
     def forward(self, x, adj):
-        out = torch.matmul(adj, x)
-        out = self.fc(out)
+        """
+        Forward pass with correct dimension handling
+        Args:
+            x: Input tensor [batch_size, seq_length, features]
+            adj: Adjacency matrix [num_nodes, num_nodes]
+        """
+        batch_size, seq_length, _ = x.size()
+        x_reshaped = x.reshape(batch_size * seq_length, -1)
+        out = self.fc(x_reshaped)
+        out = out.view(batch_size, seq_length, -1)
         return out
 
 class GraphWaveNet(torch.nn.Module):
-    def __init__(self, input_size, hidden_size, output_size, num_nodes, dropout_rate=0.2):
+    def __init__(self, input_size, hidden_size, output_size, num_nodes, dropout_rate):
         super(GraphWaveNet, self).__init__()
         self.num_nodes = num_nodes
         self.hidden_size = hidden_size
+        self.dropout_rate = dropout_rate
+        
+        # Initialize adjacency matrix
         self.adapt_adj = torch.nn.Parameter(torch.eye(num_nodes))
+        
+        # Graph convolution layers
         self.gc1 = GraphConvLayer(input_size, hidden_size)
         self.gc2 = GraphConvLayer(hidden_size, hidden_size)
+        
+        # Temporal convolution
         self.temporal_conv = torch.nn.Conv1d(
             in_channels=hidden_size,
             out_channels=hidden_size,
             kernel_size=3,
             padding=1
         )
+        
+        # Output layer
         self.fc = torch.nn.Linear(hidden_size, output_size)
         self.dropout = torch.nn.Dropout(dropout_rate)
 
     def forward(self, x):
-        adj = self.adapt_adj
-        x = self.gc1(x, adj)
+        x = self.gc1(x, self.adapt_adj)
         x = torch.relu(x)
         x = self.dropout(x)
         
-        x = self.gc2(x, adj)
+        x = self.gc2(x, self.adapt_adj)
         x = torch.relu(x)
         x = self.dropout(x)
         
@@ -71,13 +79,15 @@ class GraphWaveNet(torch.nn.Module):
         x = x.transpose(1, 2)
         x = self.dropout(x)
         
-        out = self.fc(x[:, -1, :])
+        x = x[:, -1, :]
+        out = self.fc(x)
+        
         return out
 
 class DataValidator:
-    def __init__(self, expected_columns):
+    def __init__(self, expected_columns, window_size):
         self.expected_columns = expected_columns
-        self.input_window = MODEL_PARAMS['input_window']
+        self.window_size = window_size
     
     def validate_data_format(self, data):
         try:
@@ -95,8 +105,8 @@ class DataValidator:
             if data.isnull().any().any():
                 return False, "Data contains missing values"
             
-            if len(data) < self.input_window:
-                return False, f"Need at least {self.input_window} rows, got {len(data)}"
+            if len(data) < self.window_size:
+                return False, f"Need at least {self.window_size} rows, got {len(data)}"
             
             if (data < 0).any().any():
                 return False, "Negative values found in data"
@@ -112,7 +122,7 @@ class DataValidator:
             if not is_valid:
                 return False, message
             
-            processed_data = data.tail(self.input_window).copy()
+            processed_data = data.tail(self.window_size).copy()
             processed_data = processed_data[self.expected_columns]
             
             return True, processed_data
@@ -121,66 +131,103 @@ class DataValidator:
             return False, f"Preprocessing error: {str(e)}"
 
 class StockPredictor:
-    def __init__(self, model_path='best_models/model_window60_horizon10.pth', 
-                 train_data_path='data/JSE_clean_truncated.csv'):
+    def __init__(self, model_path='best_models/model_window30_horizon1.pth', 
+                 train_data_path='../data/INVEST_GNN_clean.csv'):
         try:
             self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             logger.info(f"Using device: {self.device}")
+            
+            # Extract model configuration first
+            logger.info("Extracting model configuration...")
+            self.model_config = self.extract_model_config(model_path)
+            logger.info("Model configuration extracted:")
+            for key, value in self.model_config.items():
+                logger.info(f"{key}: {value}")
             
             # Load training data
             logger.info("Loading training data...")
             self.load_training_data(train_data_path)
             
-            # Initialize model
+            # Initialize model with extracted configuration
             logger.info("Initializing model...")
             self.initialize_model()
             
-            # Load model weights
-            logger.info("Loading model weights...")
-            self.load_model_weights(model_path)
-            
-            # Initialize validator
-            self.validator = DataValidator(self.feature_names)
-            
-            logger.info("Initialization complete!")
-            logger.info(f"Using model parameters:")
-            for key, value in MODEL_PARAMS.items():
-                logger.info(f"{key}: {value}")
+            # Initialize validator with extracted window size
+            self.validator = DataValidator(self.feature_names, self.model_config['window_size'])
             
         except Exception as e:
             logger.error(f"Initialization failed: {str(e)}")
             raise
 
+    def extract_model_config(self, model_path):
+        """Extract model configuration from saved checkpoint"""
+        # Load checkpoint
+        checkpoint = torch.load(model_path, map_location=self.device)
+        
+        # Initialize a temporary small model to get the state dict structure
+        temp_model = GraphWaveNet(
+            input_size=1,  # Temporary size
+            hidden_size=1,  # Temporary size
+            output_size=1,  # Temporary size
+            num_nodes=1,    # Temporary size
+            dropout_rate=0.1
+        )
+        
+        # Get the state dict structure
+        state_dict = checkpoint['model_state_dict']
+        
+        # Extract parameters from state dict
+        config = {
+            'model_path': model_path,
+            # Extract num_nodes from adapt_adj size
+            'num_nodes': state_dict['adapt_adj'].shape[0],
+            # Extract hidden_size from gc1 weight
+            'hidden_size': state_dict['gc1.fc.weight'].shape[0],
+            # Extract dropout_rate from saved model if available
+            'dropout_rate': state_dict.get('dropout.p', checkpoint.get('dropout_rate', 0.1)),
+            # Extract other parameters from checkpoint if available
+            'window_size': checkpoint.get('window_size', 
+                int(model_path.split('window')[1].split('_')[0])),  # Fallback to parsing from filename
+            'prediction_horizon': checkpoint.get('prediction_horizon',
+                int(model_path.split('horizon')[1].split('.')[0])),  # Fallback to parsing from filename
+            'learning_rate': checkpoint.get('learning_rate', 0.01)
+        }
+        
+        return config
+
     def load_training_data(self, train_data_path):
+        """Load and prepare training data"""
         self.train_data = pd.read_csv(train_data_path)
         self.feature_names = list(self.train_data.columns)
         self.scaler = StandardScaler()
         self.scaler.fit(self.train_data)
 
     def initialize_model(self):
+        """Initialize model with extracted configuration"""
+        num_features = len(self.feature_names)
         self.model = GraphWaveNet(
-            input_size=len(self.feature_names),
-            hidden_size=MODEL_PARAMS['hidden_size'],
-            output_size=len(self.feature_names),
-            num_nodes=MODEL_PARAMS['num_nodes'],
-            dropout_rate=MODEL_PARAMS['dropout_rate']
+            input_size=num_features,
+            hidden_size=self.model_config['hidden_size'],
+            output_size=num_features,
+            num_nodes=self.model_config['num_nodes'],
+            dropout_rate=self.model_config['dropout_rate']
         ).to(self.device)
-
-    def load_model_weights(self, model_path):
-        checkpoint = torch.load(model_path, map_location=self.device, weights_only=True)
+        
+        # Load the state dict
+        checkpoint = torch.load(self.model_config['model_path'], map_location=self.device)
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model.eval()
 
-    def predict(self, input_data, horizon=None):
+    def predict(self, input_data):
         try:
-            if horizon is None:
-                horizon = MODEL_PARAMS['prediction_horizon']
+            # Using horizon from extracted configuration
+            horizon = self.model_config['prediction_horizon']
             
             # Validate and preprocess input data
             is_valid, result = self.validator.preprocess_data(input_data)
             if not is_valid:
                 logger.error(f"Data validation failed: {result}")
-                return None
+                return None, None
             
             processed_data = result
             
@@ -188,45 +235,47 @@ class StockPredictor:
             scaled_data = self.scaler.transform(processed_data)
             x = torch.FloatTensor(scaled_data).unsqueeze(0).to(self.device)
             
+            logger.info(f"Input shape: {x.shape}")
+            
             # Make prediction
             with torch.no_grad():
                 predicted_scaled = self.model(x)
+                logger.info(f"Output shape: {predicted_scaled.shape}")
                 predicted = self.scaler.inverse_transform(
                     predicted_scaled.cpu().numpy().reshape(1, -1)
                 )
             
-            # Create results DataFrame in original format
+            # Create results DataFrame
             predicted_prices = pd.DataFrame([predicted.squeeze()], columns=self.feature_names)
             
-            # Create detailed results for visualization and analysis
+            # Create detailed results
             last_known_prices = processed_data.iloc[-1]
             percent_changes = ((predicted.squeeze() - last_known_prices) / last_known_prices * 100).round(2)
             
             detailed_results = pd.DataFrame({
                 'Stock': self.feature_names,
                 'Last_Price': last_known_prices,
-                f'Predicted_Price_{horizon}_steps_ahead': predicted.squeeze(),
+                f'Predicted_Price_{horizon}_day_ahead': predicted.squeeze(),
                 'Percent_Change': percent_changes
             })
             
-            # Sort detailed results by percent change
             detailed_results = detailed_results.sort_values('Percent_Change', ascending=False)
             
             # Create visualization
             self.visualize_predictions(processed_data, detailed_results, horizon)
             
-            # Save detailed results
+            # Save results
             output_path = 'predictions'
             os.makedirs(output_path, exist_ok=True)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M")
             detailed_results.to_csv(os.path.join(output_path, f'detailed_predictions_{timestamp}.csv'))
             
             logger.info("Prediction successful")
-            return predicted_prices
+            return predicted_prices, detailed_results
             
         except Exception as e:
             logger.error(f"Prediction failed: {str(e)}")
-            return None
+            return None, None
 
     def visualize_predictions(self, historical_data, detailed_results, horizon):
         try:
@@ -252,7 +301,7 @@ class StockPredictor:
                 # Plot prediction
                 predicted = detailed_results.loc[
                     detailed_results['Stock'] == stock,
-                    f'Predicted_Price_{horizon}_steps_ahead'
+                    f'Predicted_Price_{horizon}_day_ahead'
                 ].values[0]
                 ax.scatter(horizon, predicted, color='red', s=100, 
                          label='Prediction', marker='*')
@@ -293,35 +342,59 @@ class StockPredictor:
         except Exception as e:
             logger.error(f"Visualization failed: {str(e)}")
 
-def predict_stock_prices(data_path, horizon=None):
-    """Convenience function to load data and make predictions."""
+def get_stock_predictions(data_path):
+    """
+    Get stock predictions using the extracted model configuration.
+    
+    Args:
+        data_path (str): Path to input data CSV file
+        
+    Returns:
+        tuple: (predictions_df, detailed_results, csv_path)
+            - predictions_df: DataFrame containing predictions
+            - detailed_results: DataFrame with detailed analysis
+            - csv_path: Path to saved predictions CSV file
+    """
     try:
+        # Make predictions
         predictor = StockPredictor()
         data = pd.read_csv(data_path)
-        predictions = predictor.predict(data, horizon=horizon)
-        return predictions
+        predictions, detailed_results = predictor.predict(data)
+        
+        if predictions is not None:
+            # Create output directory
+            output_path = 'predictions'
+            os.makedirs(output_path, exist_ok=True)
+            
+            # Generate filename with timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+            predictions_filename = f'predictions_{timestamp}.csv'
+            csv_path = os.path.join(output_path, predictions_filename)
+            
+            # Save predictions
+            predictions.to_csv(csv_path, index=False)
+            
+            logger.info(f"Predictions saved to {csv_path}")
+            return predictions, detailed_results, csv_path
+            
+        return None, None, None
+        
     except Exception as e:
-        logger.error(f"Prediction failed: {str(e)}")
-        return None
+        logger.error(f"Error getting predictions: {str(e)}")
+        return None, None, None
 
 if __name__ == "__main__":
     try:
-        # Using best model's prediction horizon by default
-        predictions = predict_stock_prices('data/JSE_clean_truncated.csv')
+        predictions, detailed_results, predictions_path = get_stock_predictions('../data/INVEST_GNN_clean.csv')
         
         if predictions is not None:
             print("\nPredicted Prices:")
             print(predictions)
             
-            # Save predictions in original format
-            output_path = 'predictions'
-            os.makedirs(output_path, exist_ok=True)
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+            print("\nDetailed Results:")
+            print(detailed_results)
             
-            # Save predictions
-            filename = f'predictions_{timestamp}.csv'
-            predictions.to_csv(os.path.join(output_path, filename), index=False)
-            logger.info(f"Predictions saved to {os.path.join(output_path, filename)}")
+            print(f"\nPredictions saved to: {predictions_path}")
             
     except Exception as e:
         logger.error(f"Error in main execution: {str(e)}")

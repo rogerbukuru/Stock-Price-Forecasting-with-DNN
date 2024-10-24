@@ -1,1 +1,0 @@
-2024-10-20 23:50:02,805 - Log file created at: logs/training_log_20241020_235002.txt
