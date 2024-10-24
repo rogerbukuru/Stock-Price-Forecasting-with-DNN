@@ -98,18 +98,8 @@ class DataValidator:
             if missing_cols:
                 return False, f"Missing columns: {missing_cols}"
             
-            non_numeric = data.select_dtypes(exclude=['float64', 'int64']).columns
-            if not non_numeric.empty:
-                return False, f"Non-numeric columns found: {list(non_numeric)}"
-            
-            if data.isnull().any().any():
-                return False, "Data contains missing values"
-            
             if len(data) < self.window_size:
                 return False, f"Need at least {self.window_size} rows, got {len(data)}"
-            
-            if (data < 0).any().any():
-                return False, "Negative values found in data"
             
             return True, "Data validation successful"
             
@@ -179,28 +169,70 @@ class StockPredictor:
         # Extract parameters from state dict
         config = {
             'model_path': model_path,
-            # Extract num_nodes from adapt_adj size
             'num_nodes': state_dict['adapt_adj'].shape[0],
-            # Extract hidden_size from gc1 weight
             'hidden_size': state_dict['gc1.fc.weight'].shape[0],
-            # Extract dropout_rate from saved model if available
             'dropout_rate': state_dict.get('dropout.p', checkpoint.get('dropout_rate', 0.1)),
-            # Extract other parameters from checkpoint if available
             'window_size': checkpoint.get('window_size', 
-                int(model_path.split('window')[1].split('_')[0])),  # Fallback to parsing from filename
+                int(model_path.split('window')[1].split('_')[0])),
             'prediction_horizon': checkpoint.get('prediction_horizon',
-                int(model_path.split('horizon')[1].split('.')[0])),  # Fallback to parsing from filename
+                int(model_path.split('horizon')[1].split('.')[0])),
             'learning_rate': checkpoint.get('learning_rate', 0.01)
         }
         
         return config
 
     def load_training_data(self, train_data_path):
-        """Load and prepare training data"""
-        self.train_data = pd.read_csv(train_data_path)
-        self.feature_names = list(self.train_data.columns)
-        self.scaler = StandardScaler()
-        self.scaler.fit(self.train_data)
+        """Load and prepare training data with robust data cleaning"""
+        try:
+            # Load raw data
+            self.train_data = pd.read_csv(train_data_path)
+            logger.info(f"Raw data shape: {self.train_data.shape}")
+            
+            # Store original column names
+            self.feature_names = list(self.train_data.columns)
+            
+            # Data cleaning steps
+            for column in self.feature_names:
+                # Convert to string first to handle any potential mixed types
+                self.train_data[column] = pd.to_numeric(
+                    self.train_data[column].astype(str).str.replace(',', ''),  # Remove commas
+                    errors='coerce'  # Convert errors to NaN
+                )
+            
+            # Check for any remaining non-numeric values
+            non_numeric_cols = self.train_data.select_dtypes(exclude=['float64', 'int64']).columns
+            if len(non_numeric_cols) > 0:
+                raise ValueError(f"Non-numeric values found in columns: {list(non_numeric_cols)}")
+            
+            # Check for NaN values
+            nan_cols = self.train_data.columns[self.train_data.isna().any()].tolist()
+            if nan_cols:
+                logger.warning(f"NaN values found in columns: {nan_cols}")
+                # Forward fill followed by backward fill
+                self.train_data = self.train_data.fillna(method='ffill').fillna(method='bfill')
+            
+            # Check for infinite values
+            inf_cols = self.train_data.columns[np.isinf(self.train_data).any()].tolist()
+            if inf_cols:
+                logger.warning(f"Infinite values found in columns: {inf_cols}")
+                # Replace infinite values with NaN and then forward/backward fill
+                self.train_data = self.train_data.replace([np.inf, -np.inf], np.nan)
+                self.train_data = self.train_data.fillna(method='ffill').fillna(method='bfill')
+            
+            # Verify all data is numeric and finite
+            if not np.isfinite(self.train_data.values).all():
+                raise ValueError("Data contains non-finite values after cleaning")
+            
+            logger.info("Data cleaning completed successfully")
+            logger.info(f"Cleaned data shape: {self.train_data.shape}")
+            
+            # Initialize and fit the scaler
+            self.scaler = StandardScaler()
+            self.scaler.fit(self.train_data)
+            
+        except Exception as e:
+            logger.error(f"Error in data loading and cleaning: {str(e)}")
+            raise
 
     def initialize_model(self):
         """Initialize model with extracted configuration"""
@@ -218,13 +250,47 @@ class StockPredictor:
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model.eval()
 
+    def validate_input_data(self, input_data):
+        """Validate and clean input data using the same process as training data"""
+        try:
+            cleaned_data = input_data.copy()
+            
+            # Apply same cleaning steps as training data
+            for column in self.feature_names:
+                cleaned_data[column] = pd.to_numeric(
+                    cleaned_data[column].astype(str).str.replace(',', ''),
+                    errors='coerce'
+                )
+            
+            # Handle NaN values
+            if cleaned_data.isna().any().any():
+                cleaned_data = cleaned_data.fillna(method='ffill').fillna(method='bfill')
+            
+            # Handle infinite values
+            cleaned_data = cleaned_data.replace([np.inf, -np.inf], np.nan)
+            cleaned_data = cleaned_data.fillna(method='ffill').fillna(method='bfill')
+            
+            # Verify all data is numeric and finite
+            if not np.isfinite(cleaned_data.values).all():
+                raise ValueError("Input data contains non-finite values after cleaning")
+            
+            return True, cleaned_data
+            
+        except Exception as e:
+            return False, f"Data validation failed: {str(e)}"
+
     def predict(self, input_data):
         try:
-            # Using horizon from extracted configuration
+            # Validate and clean input data first
+            is_valid, cleaned_data = self.validate_input_data(input_data)
+            if not is_valid:
+                logger.error(cleaned_data)  # cleaned_data contains error message in this case
+                return None, None
+            
             horizon = self.model_config['prediction_horizon']
             
             # Validate and preprocess input data
-            is_valid, result = self.validator.preprocess_data(input_data)
+            is_valid, result = self.validator.preprocess_data(cleaned_data)
             if not is_valid:
                 logger.error(f"Data validation failed: {result}")
                 return None, None
@@ -328,6 +394,10 @@ class StockPredictor:
                 
                 # Set x-axis labels
                 ax.set_xticks(list(range(-len(historical), horizon+1, 5)))
+            
+            # Remove empty subplots if any
+            for idx in range(n_stocks, len(axes)):
+                fig.delaxes(axes[idx])
                 
             plt.tight_layout()
             
@@ -385,7 +455,8 @@ def get_stock_predictions(data_path):
 
 if __name__ == "__main__":
     try:
-        predictions, detailed_results, predictions_path = get_stock_predictions('../data/INVEST_GNN_clean.csv')
+        data_path = '../data/INVEST_GNN_clean.csv'
+        predictions, detailed_results, predictions_path = get_stock_predictions(data_path)
         
         if predictions is not None:
             print("\nPredicted Prices:")
@@ -395,6 +466,8 @@ if __name__ == "__main__":
             print(detailed_results)
             
             print(f"\nPredictions saved to: {predictions_path}")
+        else:
+            print("Failed to get predictions")
             
     except Exception as e:
         logger.error(f"Error in main execution: {str(e)}")

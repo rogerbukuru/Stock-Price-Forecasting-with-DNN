@@ -15,3 +15,41 @@
 2024-10-24 15:24:34,756 - INFO - Prediction plot saved to prediction_plots/predictions_20241024_152419.png
 2024-10-24 15:24:34,764 - INFO - Prediction successful
 2024-10-24 15:24:34,769 - INFO - Predictions saved to predictions/predictions_20241024_1524.csv
+2024-10-24 15:56:35,218 - INFO - Using device: cpu
+2024-10-24 15:56:35,218 - INFO - Extracting model configuration...
+2024-10-24 15:56:35,243 - INFO - Model configuration extracted:
+2024-10-24 15:56:35,243 - INFO - model_path: best_models/model_window30_horizon1.pth
+2024-10-24 15:56:35,243 - INFO - num_nodes: 30
+2024-10-24 15:56:35,244 - INFO - hidden_size: 128
+2024-10-24 15:56:35,244 - INFO - dropout_rate: 0.1
+2024-10-24 15:56:35,244 - INFO - window_size: 30
+2024-10-24 15:56:35,245 - INFO - prediction_horizon: 1
+2024-10-24 15:56:35,245 - INFO - learning_rate: 0.01
+2024-10-24 15:56:35,245 - INFO - Loading training data...
+2024-10-24 15:56:35,314 - INFO - Raw data shape: (2999, 36)
+2024-10-24 15:56:35,914 - INFO - Data cleaning completed successfully
+2024-10-24 15:56:35,915 - INFO - Cleaned data shape: (2999, 36)
+2024-10-24 15:56:35,929 - INFO - Initializing model...
+2024-10-24 15:56:36,577 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-24 15:56:36,582 - INFO - Output shape: torch.Size([1, 36])
+2024-10-24 15:56:36,592 - ERROR - Prediction failed: 'StockPredictor' object has no attribute 'visualize_predictions'
+2024-10-24 15:58:19,012 - INFO - Using device: cpu
+2024-10-24 15:58:19,013 - INFO - Extracting model configuration...
+2024-10-24 15:58:19,036 - INFO - Model configuration extracted:
+2024-10-24 15:58:19,036 - INFO - model_path: best_models/model_window30_horizon1.pth
+2024-10-24 15:58:19,037 - INFO - num_nodes: 30
+2024-10-24 15:58:19,037 - INFO - hidden_size: 128
+2024-10-24 15:58:19,038 - INFO - dropout_rate: 0.1
+2024-10-24 15:58:19,038 - INFO - window_size: 30
+2024-10-24 15:58:19,039 - INFO - prediction_horizon: 1
+2024-10-24 15:58:19,039 - INFO - learning_rate: 0.01
+2024-10-24 15:58:19,039 - INFO - Loading training data...
+2024-10-24 15:58:19,112 - INFO - Raw data shape: (2999, 36)
+2024-10-24 15:58:19,640 - INFO - Data cleaning completed successfully
+2024-10-24 15:58:19,641 - INFO - Cleaned data shape: (2999, 36)
+2024-10-24 15:58:19,652 - INFO - Initializing model...
+2024-10-24 15:58:20,275 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-24 15:58:20,280 - INFO - Output shape: torch.Size([1, 36])
+2024-10-24 15:58:51,940 - INFO - Prediction plot saved to prediction_plots/predictions_20241024_155831.png
+2024-10-24 15:58:51,948 - INFO - Prediction successful
+2024-10-24 15:58:51,954 - INFO - Predictions saved to predictions/predictions_20241024_1558.csv
