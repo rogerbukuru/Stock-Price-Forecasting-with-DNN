@@ -121,7 +121,7 @@ class DataValidator:
             return False, f"Preprocessing error: {str(e)}"
 
 class StockPredictor:
-    def __init__(self, model_path='situation_analysis/best_models/model_window30_horizon1.pth',  #'best_models/model_window30_horizon1.pth'
+    def __init__(self, model_path='situation_analysis/updated_model/model_window30_horizon1.pth',  #'best_models/model_window30_horizon1.pth'
                  train_data_path='data/INVEST_GNN_clean.csv'): #../data/INVEST_GNN_clean.csv
         try:
             self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

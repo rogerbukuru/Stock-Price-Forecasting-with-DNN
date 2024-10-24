@@ -7,13 +7,33 @@ import numpy as np
 
 from invest.decision import investment_portfolio
 from invest.preprocessing.dataloader import load_data
+from invest.preprocessing.simulation import simulate
+import pandas as pd
+import torch
+from situation_analysis.continual_learning import load_model
+from situation_analysis.continual_learning import ContinualLearningPipeline
+
+
 
 VERSION = 1.0
 
+def simulate_continual_learning(simulation_days):
+    model_file_path              = 'situation_analysis/best_models/model_window30_horizon1.pth'
+    device                       = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model, val_loss, test_loss   = load_model(model_file_path, device)
+    print(f"Current val loss: {val_loss}")
+    pipeline                     = ContinualLearningPipeline(model = model, val_loss = val_loss, test_loss = test_loss, window_size = 30, horizon = 1)
+    data                         = pd.read_csv("data/INVEST_GNN_clean.csv")
+    print(data.shape) # 3146 daily closing prices for 30 stocks
+
+    for i in range(simulation_days):
+        new_data = simulate(data, frac=0.5, scale=1, method='std')
+        pipeline.continual_learning_step(new_data, walk_forward_step = i)
 
 def main():
     start = time.time()
     df_ = load_data()
+    simulate_continual_learning(simulation_days=3)
     investment_horizon = "short" # change to "long" for the default INVEST setup
     jgind_portfolio = investment_portfolio(df_, args, "JGIND", True, investment_horizon)
     jcsev_portfolio = investment_portfolio(df_, args, "JCSEV", True, investment_horizon)
