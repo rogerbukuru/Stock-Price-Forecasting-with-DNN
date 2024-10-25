@@ -33,7 +33,7 @@ def simulate_continual_learning(simulation_days):
 def main():
     start = time.time()
     df_ = load_data()
-    simulate_continual_learning(simulation_days=3)
+    simulate_continual_learning(simulation_days=2)
     investment_horizon = "short" # change to "long" for the default INVEST setup
     jgind_portfolio = investment_portfolio(df_, args, "JGIND", True, investment_horizon)
     jcsev_portfolio = investment_portfolio(df_, args, "JCSEV", True, investment_horizon)
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     parser.add_argument("--start", type=int, default=2015)
     parser.add_argument("--end", type=int, default=2018)
     parser.add_argument("--margin_of_safety", type=float, default=0.1)
-    parser.add_argument("--beta", type=float, default=1.6)
+    parser.add_argument("--beta", type=float, default=1.0)
     parser.add_argument("--extension", type=str2bool, default=False)
     parser.add_argument("--noise", type=str2bool, default=False)
     parser.add_argument("--ablation", type=str2bool, default=False) # If true will only perform value investing if the network is 'v'
