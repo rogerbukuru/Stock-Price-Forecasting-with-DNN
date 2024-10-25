@@ -1329,3 +1329,488 @@
 2024-10-25 09:11:26,644 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
 2024-10-25 09:11:26,646 - INFO - Prediction successful
 2024-10-25 09:11:26,647 - INFO - Predictions saved to predictions/predictions_20241025_0911.csv
+2024-10-25 09:55:56,258 - INFO - Log file created at: logs/training_log_20241025_095556.txt
+2024-10-25 09:56:03,070 - INFO - Using device: cpu
+2024-10-25 09:56:03,071 - INFO - Extracting model configuration...
+2024-10-25 09:56:03,073 - INFO - Model configuration extracted:
+2024-10-25 09:56:03,074 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 09:56:03,074 - INFO - num_nodes: 30
+2024-10-25 09:56:03,074 - INFO - hidden_size: 128
+2024-10-25 09:56:03,074 - INFO - dropout_rate: 0.1
+2024-10-25 09:56:03,074 - INFO - window_size: 30
+2024-10-25 09:56:03,074 - INFO - prediction_horizon: 1
+2024-10-25 09:56:03,074 - INFO - learning_rate: 0.01
+2024-10-25 09:56:03,074 - INFO - Loading training data...
+2024-10-25 09:56:03,080 - INFO - Raw data shape: (2999, 36)
+2024-10-25 09:56:03,156 - INFO - Data cleaning completed successfully
+2024-10-25 09:56:03,156 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 09:56:03,158 - INFO - Initializing model...
+2024-10-25 09:56:03,253 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 09:56:03,254 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 09:56:03,257 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 09:56:03,259 - INFO - Prediction successful
+2024-10-25 09:56:03,261 - INFO - Predictions saved to predictions/predictions_20241025_0956.csv
+2024-10-25 09:56:04,016 - INFO - Using device: cpu
+2024-10-25 09:56:04,016 - INFO - Extracting model configuration...
+2024-10-25 09:56:04,018 - INFO - Model configuration extracted:
+2024-10-25 09:56:04,018 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 09:56:04,018 - INFO - num_nodes: 30
+2024-10-25 09:56:04,018 - INFO - hidden_size: 128
+2024-10-25 09:56:04,018 - INFO - dropout_rate: 0.1
+2024-10-25 09:56:04,018 - INFO - window_size: 30
+2024-10-25 09:56:04,018 - INFO - prediction_horizon: 1
+2024-10-25 09:56:04,018 - INFO - learning_rate: 0.01
+2024-10-25 09:56:04,018 - INFO - Loading training data...
+2024-10-25 09:56:04,025 - INFO - Raw data shape: (2999, 36)
+2024-10-25 09:56:04,100 - INFO - Data cleaning completed successfully
+2024-10-25 09:56:04,101 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 09:56:04,103 - INFO - Initializing model...
+2024-10-25 09:56:04,187 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 09:56:04,188 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 09:56:04,190 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 09:56:04,192 - INFO - Prediction successful
+2024-10-25 09:56:04,193 - INFO - Predictions saved to predictions/predictions_20241025_0956.csv
+2024-10-25 09:56:06,486 - INFO - Using device: cpu
+2024-10-25 09:56:06,488 - INFO - Extracting model configuration...
+2024-10-25 09:56:06,496 - INFO - Model configuration extracted:
+2024-10-25 09:56:06,496 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 09:56:06,496 - INFO - num_nodes: 30
+2024-10-25 09:56:06,496 - INFO - hidden_size: 128
+2024-10-25 09:56:06,496 - INFO - dropout_rate: 0.1
+2024-10-25 09:56:06,496 - INFO - window_size: 30
+2024-10-25 09:56:06,496 - INFO - prediction_horizon: 1
+2024-10-25 09:56:06,496 - INFO - learning_rate: 0.01
+2024-10-25 09:56:06,496 - INFO - Loading training data...
+2024-10-25 09:56:06,507 - INFO - Raw data shape: (2999, 36)
+2024-10-25 09:56:06,589 - INFO - Data cleaning completed successfully
+2024-10-25 09:56:06,590 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 09:56:06,592 - INFO - Initializing model...
+2024-10-25 09:56:06,679 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 09:56:06,680 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 09:56:06,681 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 09:56:06,683 - INFO - Prediction successful
+2024-10-25 09:56:06,684 - INFO - Predictions saved to predictions/predictions_20241025_0956.csv
+2024-10-25 09:56:07,257 - INFO - Using device: cpu
+2024-10-25 09:56:07,257 - INFO - Extracting model configuration...
+2024-10-25 09:56:07,259 - INFO - Model configuration extracted:
+2024-10-25 09:56:07,259 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 09:56:07,259 - INFO - num_nodes: 30
+2024-10-25 09:56:07,259 - INFO - hidden_size: 128
+2024-10-25 09:56:07,259 - INFO - dropout_rate: 0.1
+2024-10-25 09:56:07,259 - INFO - window_size: 30
+2024-10-25 09:56:07,259 - INFO - prediction_horizon: 1
+2024-10-25 09:56:07,259 - INFO - learning_rate: 0.01
+2024-10-25 09:56:07,260 - INFO - Loading training data...
+2024-10-25 09:56:07,266 - INFO - Raw data shape: (2999, 36)
+2024-10-25 09:56:07,342 - INFO - Data cleaning completed successfully
+2024-10-25 09:56:07,342 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 09:56:07,344 - INFO - Initializing model...
+2024-10-25 09:56:07,431 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 09:56:07,432 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 09:56:07,434 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 09:56:07,435 - INFO - Prediction successful
+2024-10-25 09:56:07,436 - INFO - Predictions saved to predictions/predictions_20241025_0956.csv
+2024-10-25 09:56:08,119 - INFO - Using device: cpu
+2024-10-25 09:56:08,120 - INFO - Extracting model configuration...
+2024-10-25 09:56:08,121 - INFO - Model configuration extracted:
+2024-10-25 09:56:08,122 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 09:56:08,122 - INFO - num_nodes: 30
+2024-10-25 09:56:08,122 - INFO - hidden_size: 128
+2024-10-25 09:56:08,122 - INFO - dropout_rate: 0.1
+2024-10-25 09:56:08,122 - INFO - window_size: 30
+2024-10-25 09:56:08,122 - INFO - prediction_horizon: 1
+2024-10-25 09:56:08,122 - INFO - learning_rate: 0.01
+2024-10-25 09:56:08,122 - INFO - Loading training data...
+2024-10-25 09:56:08,129 - INFO - Raw data shape: (2999, 36)
+2024-10-25 09:56:08,204 - INFO - Data cleaning completed successfully
+2024-10-25 09:56:08,204 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 09:56:08,207 - INFO - Initializing model...
+2024-10-25 09:56:08,295 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 09:56:08,295 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 09:56:08,297 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 09:56:08,298 - INFO - Prediction successful
+2024-10-25 09:56:08,299 - INFO - Predictions saved to predictions/predictions_20241025_0956.csv
+2024-10-25 09:56:10,461 - INFO - Using device: cpu
+2024-10-25 09:56:10,461 - INFO - Extracting model configuration...
+2024-10-25 09:56:10,464 - INFO - Model configuration extracted:
+2024-10-25 09:56:10,464 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 09:56:10,464 - INFO - num_nodes: 30
+2024-10-25 09:56:10,464 - INFO - hidden_size: 128
+2024-10-25 09:56:10,464 - INFO - dropout_rate: 0.1
+2024-10-25 09:56:10,465 - INFO - window_size: 30
+2024-10-25 09:56:10,465 - INFO - prediction_horizon: 1
+2024-10-25 09:56:10,465 - INFO - learning_rate: 0.01
+2024-10-25 09:56:10,465 - INFO - Loading training data...
+2024-10-25 09:56:10,471 - INFO - Raw data shape: (2999, 36)
+2024-10-25 09:56:10,554 - INFO - Data cleaning completed successfully
+2024-10-25 09:56:10,554 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 09:56:10,556 - INFO - Initializing model...
+2024-10-25 09:56:10,651 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 09:56:10,651 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 09:56:10,653 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 09:56:10,655 - INFO - Prediction successful
+2024-10-25 09:56:10,656 - INFO - Predictions saved to predictions/predictions_20241025_0956.csv
+2024-10-25 10:00:05,780 - INFO - Log file created at: logs/training_log_20241025_100005.txt
+2024-10-25 10:00:12,612 - INFO - Using device: cpu
+2024-10-25 10:00:12,613 - INFO - Extracting model configuration...
+2024-10-25 10:00:12,615 - INFO - Model configuration extracted:
+2024-10-25 10:00:12,615 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:00:12,615 - INFO - num_nodes: 30
+2024-10-25 10:00:12,615 - INFO - hidden_size: 128
+2024-10-25 10:00:12,616 - INFO - dropout_rate: 0.1
+2024-10-25 10:00:12,616 - INFO - window_size: 30
+2024-10-25 10:00:12,616 - INFO - prediction_horizon: 1
+2024-10-25 10:00:12,616 - INFO - learning_rate: 0.01
+2024-10-25 10:00:12,616 - INFO - Loading training data...
+2024-10-25 10:00:12,623 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:00:12,700 - INFO - Data cleaning completed successfully
+2024-10-25 10:00:12,700 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:00:12,702 - INFO - Initializing model...
+2024-10-25 10:00:12,792 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:00:12,793 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:00:12,795 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:00:12,797 - INFO - Prediction successful
+2024-10-25 10:00:12,798 - INFO - Predictions saved to predictions/predictions_20241025_1000.csv
+2024-10-25 10:00:14,340 - INFO - Using device: cpu
+2024-10-25 10:00:14,340 - INFO - Extracting model configuration...
+2024-10-25 10:00:14,342 - INFO - Model configuration extracted:
+2024-10-25 10:00:14,343 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:00:14,343 - INFO - num_nodes: 30
+2024-10-25 10:00:14,343 - INFO - hidden_size: 128
+2024-10-25 10:00:14,343 - INFO - dropout_rate: 0.1
+2024-10-25 10:00:14,343 - INFO - window_size: 30
+2024-10-25 10:00:14,343 - INFO - prediction_horizon: 1
+2024-10-25 10:00:14,343 - INFO - learning_rate: 0.01
+2024-10-25 10:00:14,343 - INFO - Loading training data...
+2024-10-25 10:00:14,349 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:00:14,425 - INFO - Data cleaning completed successfully
+2024-10-25 10:00:14,425 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:00:14,427 - INFO - Initializing model...
+2024-10-25 10:00:14,513 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:00:14,514 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:00:14,516 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:00:14,517 - INFO - Prediction successful
+2024-10-25 10:00:14,518 - INFO - Predictions saved to predictions/predictions_20241025_1000.csv
+2024-10-25 10:00:16,569 - INFO - Using device: cpu
+2024-10-25 10:00:16,570 - INFO - Extracting model configuration...
+2024-10-25 10:00:16,575 - INFO - Model configuration extracted:
+2024-10-25 10:00:16,575 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:00:16,575 - INFO - num_nodes: 30
+2024-10-25 10:00:16,575 - INFO - hidden_size: 128
+2024-10-25 10:00:16,575 - INFO - dropout_rate: 0.1
+2024-10-25 10:00:16,575 - INFO - window_size: 30
+2024-10-25 10:00:16,575 - INFO - prediction_horizon: 1
+2024-10-25 10:00:16,576 - INFO - learning_rate: 0.01
+2024-10-25 10:00:16,576 - INFO - Loading training data...
+2024-10-25 10:00:16,582 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:00:16,657 - INFO - Data cleaning completed successfully
+2024-10-25 10:00:16,658 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:00:16,660 - INFO - Initializing model...
+2024-10-25 10:00:16,750 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:00:16,751 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:00:16,753 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:00:16,754 - INFO - Prediction successful
+2024-10-25 10:00:16,755 - INFO - Predictions saved to predictions/predictions_20241025_1000.csv
+2024-10-25 10:00:18,255 - INFO - Using device: cpu
+2024-10-25 10:00:18,255 - INFO - Extracting model configuration...
+2024-10-25 10:00:18,257 - INFO - Model configuration extracted:
+2024-10-25 10:00:18,257 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:00:18,257 - INFO - num_nodes: 30
+2024-10-25 10:00:18,257 - INFO - hidden_size: 128
+2024-10-25 10:00:18,257 - INFO - dropout_rate: 0.1
+2024-10-25 10:00:18,257 - INFO - window_size: 30
+2024-10-25 10:00:18,258 - INFO - prediction_horizon: 1
+2024-10-25 10:00:18,258 - INFO - learning_rate: 0.01
+2024-10-25 10:00:18,258 - INFO - Loading training data...
+2024-10-25 10:00:18,264 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:00:18,339 - INFO - Data cleaning completed successfully
+2024-10-25 10:00:18,339 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:00:18,341 - INFO - Initializing model...
+2024-10-25 10:00:18,428 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:00:18,429 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:00:18,431 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:00:18,434 - INFO - Prediction successful
+2024-10-25 10:00:18,435 - INFO - Predictions saved to predictions/predictions_20241025_1000.csv
+2024-10-25 10:00:20,221 - INFO - Using device: cpu
+2024-10-25 10:00:20,221 - INFO - Extracting model configuration...
+2024-10-25 10:00:20,223 - INFO - Model configuration extracted:
+2024-10-25 10:00:20,223 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:00:20,223 - INFO - num_nodes: 30
+2024-10-25 10:00:20,224 - INFO - hidden_size: 128
+2024-10-25 10:00:20,224 - INFO - dropout_rate: 0.1
+2024-10-25 10:00:20,224 - INFO - window_size: 30
+2024-10-25 10:00:20,224 - INFO - prediction_horizon: 1
+2024-10-25 10:00:20,224 - INFO - learning_rate: 0.01
+2024-10-25 10:00:20,224 - INFO - Loading training data...
+2024-10-25 10:00:20,230 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:00:20,305 - INFO - Data cleaning completed successfully
+2024-10-25 10:00:20,306 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:00:20,308 - INFO - Initializing model...
+2024-10-25 10:00:20,395 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:00:20,396 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:00:20,397 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:00:20,399 - INFO - Prediction successful
+2024-10-25 10:00:20,400 - INFO - Predictions saved to predictions/predictions_20241025_1000.csv
+2024-10-25 10:00:22,689 - INFO - Using device: cpu
+2024-10-25 10:00:22,690 - INFO - Extracting model configuration...
+2024-10-25 10:00:22,692 - INFO - Model configuration extracted:
+2024-10-25 10:00:22,692 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:00:22,692 - INFO - num_nodes: 30
+2024-10-25 10:00:22,692 - INFO - hidden_size: 128
+2024-10-25 10:00:22,692 - INFO - dropout_rate: 0.1
+2024-10-25 10:00:22,692 - INFO - window_size: 30
+2024-10-25 10:00:22,692 - INFO - prediction_horizon: 1
+2024-10-25 10:00:22,692 - INFO - learning_rate: 0.01
+2024-10-25 10:00:22,692 - INFO - Loading training data...
+2024-10-25 10:00:22,699 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:00:22,784 - INFO - Data cleaning completed successfully
+2024-10-25 10:00:22,785 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:00:22,787 - INFO - Initializing model...
+2024-10-25 10:00:22,882 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:00:22,883 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:00:22,885 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:00:22,886 - INFO - Prediction successful
+2024-10-25 10:00:22,887 - INFO - Predictions saved to predictions/predictions_20241025_1000.csv
+2024-10-25 10:07:37,695 - INFO - Log file created at: logs/training_log_20241025_100737.txt
+2024-10-25 10:07:44,596 - INFO - Using device: cpu
+2024-10-25 10:07:44,597 - INFO - Extracting model configuration...
+2024-10-25 10:07:44,599 - INFO - Model configuration extracted:
+2024-10-25 10:07:44,599 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:07:44,599 - INFO - num_nodes: 30
+2024-10-25 10:07:44,599 - INFO - hidden_size: 128
+2024-10-25 10:07:44,599 - INFO - dropout_rate: 0.1
+2024-10-25 10:07:44,599 - INFO - window_size: 30
+2024-10-25 10:07:44,599 - INFO - prediction_horizon: 1
+2024-10-25 10:07:44,599 - INFO - learning_rate: 0.01
+2024-10-25 10:07:44,600 - INFO - Loading training data...
+2024-10-25 10:07:44,606 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:07:44,683 - INFO - Data cleaning completed successfully
+2024-10-25 10:07:44,683 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:07:44,685 - INFO - Initializing model...
+2024-10-25 10:07:44,772 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:07:44,773 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:07:44,776 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:07:44,779 - INFO - Prediction successful
+2024-10-25 10:07:44,780 - INFO - Predictions saved to predictions/predictions_20241025_1007.csv
+2024-10-25 10:07:46,730 - INFO - Using device: cpu
+2024-10-25 10:07:46,731 - INFO - Extracting model configuration...
+2024-10-25 10:07:46,739 - INFO - Model configuration extracted:
+2024-10-25 10:07:46,739 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:07:46,739 - INFO - num_nodes: 30
+2024-10-25 10:07:46,739 - INFO - hidden_size: 128
+2024-10-25 10:07:46,739 - INFO - dropout_rate: 0.1
+2024-10-25 10:07:46,739 - INFO - window_size: 30
+2024-10-25 10:07:46,739 - INFO - prediction_horizon: 1
+2024-10-25 10:07:46,739 - INFO - learning_rate: 0.01
+2024-10-25 10:07:46,740 - INFO - Loading training data...
+2024-10-25 10:07:46,747 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:07:46,825 - INFO - Data cleaning completed successfully
+2024-10-25 10:07:46,825 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:07:46,828 - INFO - Initializing model...
+2024-10-25 10:07:46,928 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:07:46,928 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:07:46,930 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:07:46,932 - INFO - Prediction successful
+2024-10-25 10:07:46,933 - INFO - Predictions saved to predictions/predictions_20241025_1007.csv
+2024-10-25 10:07:48,787 - INFO - Using device: cpu
+2024-10-25 10:07:48,788 - INFO - Extracting model configuration...
+2024-10-25 10:07:48,789 - INFO - Model configuration extracted:
+2024-10-25 10:07:48,790 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:07:48,790 - INFO - num_nodes: 30
+2024-10-25 10:07:48,790 - INFO - hidden_size: 128
+2024-10-25 10:07:48,790 - INFO - dropout_rate: 0.1
+2024-10-25 10:07:48,790 - INFO - window_size: 30
+2024-10-25 10:07:48,790 - INFO - prediction_horizon: 1
+2024-10-25 10:07:48,790 - INFO - learning_rate: 0.01
+2024-10-25 10:07:48,790 - INFO - Loading training data...
+2024-10-25 10:07:48,797 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:07:48,871 - INFO - Data cleaning completed successfully
+2024-10-25 10:07:48,871 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:07:48,873 - INFO - Initializing model...
+2024-10-25 10:07:48,971 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:07:48,972 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:07:48,974 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:07:48,975 - INFO - Prediction successful
+2024-10-25 10:07:48,976 - INFO - Predictions saved to predictions/predictions_20241025_1007.csv
+2024-10-25 10:07:50,719 - INFO - Using device: cpu
+2024-10-25 10:07:50,720 - INFO - Extracting model configuration...
+2024-10-25 10:07:50,722 - INFO - Model configuration extracted:
+2024-10-25 10:07:50,722 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:07:50,722 - INFO - num_nodes: 30
+2024-10-25 10:07:50,722 - INFO - hidden_size: 128
+2024-10-25 10:07:50,722 - INFO - dropout_rate: 0.1
+2024-10-25 10:07:50,722 - INFO - window_size: 30
+2024-10-25 10:07:50,722 - INFO - prediction_horizon: 1
+2024-10-25 10:07:50,722 - INFO - learning_rate: 0.01
+2024-10-25 10:07:50,722 - INFO - Loading training data...
+2024-10-25 10:07:50,729 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:07:50,805 - INFO - Data cleaning completed successfully
+2024-10-25 10:07:50,805 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:07:50,807 - INFO - Initializing model...
+2024-10-25 10:07:50,904 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:07:50,905 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:07:50,907 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:07:50,908 - INFO - Prediction successful
+2024-10-25 10:07:50,909 - INFO - Predictions saved to predictions/predictions_20241025_1007.csv
+2024-10-25 10:07:53,067 - INFO - Using device: cpu
+2024-10-25 10:07:53,068 - INFO - Extracting model configuration...
+2024-10-25 10:07:53,070 - INFO - Model configuration extracted:
+2024-10-25 10:07:53,070 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:07:53,070 - INFO - num_nodes: 30
+2024-10-25 10:07:53,070 - INFO - hidden_size: 128
+2024-10-25 10:07:53,070 - INFO - dropout_rate: 0.1
+2024-10-25 10:07:53,070 - INFO - window_size: 30
+2024-10-25 10:07:53,070 - INFO - prediction_horizon: 1
+2024-10-25 10:07:53,071 - INFO - learning_rate: 0.01
+2024-10-25 10:07:53,071 - INFO - Loading training data...
+2024-10-25 10:07:53,077 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:07:53,153 - INFO - Data cleaning completed successfully
+2024-10-25 10:07:53,153 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:07:53,156 - INFO - Initializing model...
+2024-10-25 10:07:53,241 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:07:53,242 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:07:53,244 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:07:53,245 - INFO - Prediction successful
+2024-10-25 10:07:53,247 - INFO - Predictions saved to predictions/predictions_20241025_1007.csv
+2024-10-25 10:07:55,222 - INFO - Using device: cpu
+2024-10-25 10:07:55,222 - INFO - Extracting model configuration...
+2024-10-25 10:07:55,224 - INFO - Model configuration extracted:
+2024-10-25 10:07:55,224 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:07:55,224 - INFO - num_nodes: 30
+2024-10-25 10:07:55,224 - INFO - hidden_size: 128
+2024-10-25 10:07:55,224 - INFO - dropout_rate: 0.1
+2024-10-25 10:07:55,225 - INFO - window_size: 30
+2024-10-25 10:07:55,225 - INFO - prediction_horizon: 1
+2024-10-25 10:07:55,225 - INFO - learning_rate: 0.01
+2024-10-25 10:07:55,225 - INFO - Loading training data...
+2024-10-25 10:07:55,231 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:07:55,304 - INFO - Data cleaning completed successfully
+2024-10-25 10:07:55,304 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:07:55,306 - INFO - Initializing model...
+2024-10-25 10:07:55,393 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:07:55,394 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:07:55,395 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:07:55,397 - INFO - Prediction successful
+2024-10-25 10:07:55,398 - INFO - Predictions saved to predictions/predictions_20241025_1007.csv
+2024-10-25 10:23:04,465 - INFO - Log file created at: logs/training_log_20241025_102304.txt
+2024-10-25 10:29:01,276 - INFO - Log file created at: logs/training_log_20241025_102901.txt
+2024-10-25 10:29:08,668 - INFO - Using device: cpu
+2024-10-25 10:29:08,669 - INFO - Extracting model configuration...
+2024-10-25 10:29:08,671 - INFO - Model configuration extracted:
+2024-10-25 10:29:08,672 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:29:08,672 - INFO - num_nodes: 30
+2024-10-25 10:29:08,672 - INFO - hidden_size: 128
+2024-10-25 10:29:08,672 - INFO - dropout_rate: 0.1
+2024-10-25 10:29:08,672 - INFO - window_size: 30
+2024-10-25 10:29:08,672 - INFO - prediction_horizon: 1
+2024-10-25 10:29:08,672 - INFO - learning_rate: 0.01
+2024-10-25 10:29:08,672 - INFO - Loading training data...
+2024-10-25 10:29:08,678 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:29:08,757 - INFO - Data cleaning completed successfully
+2024-10-25 10:29:08,757 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:29:08,759 - INFO - Initializing model...
+2024-10-25 10:29:08,842 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:29:08,843 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:29:08,846 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:29:08,848 - INFO - Prediction successful
+2024-10-25 10:29:08,849 - INFO - Predictions saved to predictions/predictions_20241025_1029.csv
+2024-10-25 10:29:10,615 - INFO - Using device: cpu
+2024-10-25 10:29:10,616 - INFO - Extracting model configuration...
+2024-10-25 10:29:10,618 - INFO - Model configuration extracted:
+2024-10-25 10:29:10,618 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:29:10,618 - INFO - num_nodes: 30
+2024-10-25 10:29:10,618 - INFO - hidden_size: 128
+2024-10-25 10:29:10,618 - INFO - dropout_rate: 0.1
+2024-10-25 10:29:10,618 - INFO - window_size: 30
+2024-10-25 10:29:10,618 - INFO - prediction_horizon: 1
+2024-10-25 10:29:10,618 - INFO - learning_rate: 0.01
+2024-10-25 10:29:10,618 - INFO - Loading training data...
+2024-10-25 10:29:10,624 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:29:10,699 - INFO - Data cleaning completed successfully
+2024-10-25 10:29:10,699 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:29:10,701 - INFO - Initializing model...
+2024-10-25 10:29:10,790 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:29:10,790 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:29:10,792 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:29:10,793 - INFO - Prediction successful
+2024-10-25 10:29:10,794 - INFO - Predictions saved to predictions/predictions_20241025_1029.csv
+2024-10-25 10:29:12,746 - INFO - Using device: cpu
+2024-10-25 10:29:12,747 - INFO - Extracting model configuration...
+2024-10-25 10:29:12,753 - INFO - Model configuration extracted:
+2024-10-25 10:29:12,753 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:29:12,753 - INFO - num_nodes: 30
+2024-10-25 10:29:12,753 - INFO - hidden_size: 128
+2024-10-25 10:29:12,753 - INFO - dropout_rate: 0.1
+2024-10-25 10:29:12,753 - INFO - window_size: 30
+2024-10-25 10:29:12,753 - INFO - prediction_horizon: 1
+2024-10-25 10:29:12,753 - INFO - learning_rate: 0.01
+2024-10-25 10:29:12,753 - INFO - Loading training data...
+2024-10-25 10:29:12,760 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:29:12,834 - INFO - Data cleaning completed successfully
+2024-10-25 10:29:12,834 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:29:12,836 - INFO - Initializing model...
+2024-10-25 10:29:12,921 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:29:12,922 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:29:12,923 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:29:12,925 - INFO - Prediction successful
+2024-10-25 10:29:12,927 - INFO - Predictions saved to predictions/predictions_20241025_1029.csv
+2024-10-25 10:29:14,663 - INFO - Using device: cpu
+2024-10-25 10:29:14,664 - INFO - Extracting model configuration...
+2024-10-25 10:29:14,666 - INFO - Model configuration extracted:
+2024-10-25 10:29:14,666 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:29:14,666 - INFO - num_nodes: 30
+2024-10-25 10:29:14,666 - INFO - hidden_size: 128
+2024-10-25 10:29:14,666 - INFO - dropout_rate: 0.1
+2024-10-25 10:29:14,666 - INFO - window_size: 30
+2024-10-25 10:29:14,666 - INFO - prediction_horizon: 1
+2024-10-25 10:29:14,666 - INFO - learning_rate: 0.01
+2024-10-25 10:29:14,666 - INFO - Loading training data...
+2024-10-25 10:29:14,673 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:29:14,753 - INFO - Data cleaning completed successfully
+2024-10-25 10:29:14,753 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:29:14,755 - INFO - Initializing model...
+2024-10-25 10:29:14,844 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:29:14,845 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:29:14,847 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:29:14,848 - INFO - Prediction successful
+2024-10-25 10:29:14,849 - INFO - Predictions saved to predictions/predictions_20241025_1029.csv
+2024-10-25 10:29:17,015 - INFO - Using device: cpu
+2024-10-25 10:29:17,015 - INFO - Extracting model configuration...
+2024-10-25 10:29:17,017 - INFO - Model configuration extracted:
+2024-10-25 10:29:17,018 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:29:17,018 - INFO - num_nodes: 30
+2024-10-25 10:29:17,018 - INFO - hidden_size: 128
+2024-10-25 10:29:17,018 - INFO - dropout_rate: 0.1
+2024-10-25 10:29:17,018 - INFO - window_size: 30
+2024-10-25 10:29:17,018 - INFO - prediction_horizon: 1
+2024-10-25 10:29:17,018 - INFO - learning_rate: 0.01
+2024-10-25 10:29:17,018 - INFO - Loading training data...
+2024-10-25 10:29:17,025 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:29:17,099 - INFO - Data cleaning completed successfully
+2024-10-25 10:29:17,099 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:29:17,101 - INFO - Initializing model...
+2024-10-25 10:29:17,187 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:29:17,188 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:29:17,190 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:29:17,191 - INFO - Prediction successful
+2024-10-25 10:29:17,192 - INFO - Predictions saved to predictions/predictions_20241025_1029.csv
+2024-10-25 10:29:19,304 - INFO - Using device: cpu
+2024-10-25 10:29:19,305 - INFO - Extracting model configuration...
+2024-10-25 10:29:19,307 - INFO - Model configuration extracted:
+2024-10-25 10:29:19,307 - INFO - model_path: situation_analysis/updated_model/model_window30_horizon1.pth
+2024-10-25 10:29:19,307 - INFO - num_nodes: 30
+2024-10-25 10:29:19,307 - INFO - hidden_size: 128
+2024-10-25 10:29:19,307 - INFO - dropout_rate: 0.1
+2024-10-25 10:29:19,307 - INFO - window_size: 30
+2024-10-25 10:29:19,307 - INFO - prediction_horizon: 1
+2024-10-25 10:29:19,307 - INFO - learning_rate: 0.01
+2024-10-25 10:29:19,307 - INFO - Loading training data...
+2024-10-25 10:29:19,315 - INFO - Raw data shape: (2999, 36)
+2024-10-25 10:29:19,393 - INFO - Data cleaning completed successfully
+2024-10-25 10:29:19,393 - INFO - Cleaned data shape: (2999, 36)
+2024-10-25 10:29:19,395 - INFO - Initializing model...
+2024-10-25 10:29:19,485 - INFO - Input shape: torch.Size([1, 30, 36])
+2024-10-25 10:29:19,486 - INFO - Output shape: torch.Size([1, 36])
+2024-10-25 10:29:19,488 - ERROR - Visualization failed: 'seaborn' is not a valid package style, path of style file, URL of style file, or library style name (library styles are listed in `style.available`)
+2024-10-25 10:29:19,489 - INFO - Prediction successful
+2024-10-25 10:29:19,490 - INFO - Predictions saved to predictions/predictions_20241025_1029.csv

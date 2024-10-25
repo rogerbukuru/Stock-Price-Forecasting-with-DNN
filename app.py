@@ -26,8 +26,8 @@ def simulate_continual_learning(simulation_days):
     data                         = pd.read_csv("data/INVEST_GNN_clean.csv")
     print(data.shape) # 3146 daily closing prices for 30 stocks
 
-    for i in range(simulation_days):git st
-        new_data = simulate(data, frac=0.5, scale=3, method='std')
+    for i in range(simulation_days):
+        new_data = simulate(data, frac=0.5, scale=4, method='std')
         pipeline.continual_learning_step(new_data, walk_forward_step = i)
 
 def main():

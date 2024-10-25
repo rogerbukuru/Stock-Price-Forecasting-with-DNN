@@ -1,0 +1,54 @@
+{
+  "JGIND": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["AFRIMAT", "INVICTA", "TRENCOR"],
+      "2016": ["AFRIMAT", "BARLOWORLD", "BIDVEST GROUP", "GRINDROD", "HUDACO", "IMPERIAL", "INVICTA", "KAP INDUSTRIAL", "MPACT", "MURRAY & ROBERTS", "NAMPAK", "PPC", "RAUBEX GROUP", "REUNERT", "SUPER GROUP", "TRENCOR"],
+      "2017": ["KAP INDUSTRIAL"]
+    },
+    "annualReturns": {
+      "IP.JGIND": [-27.2, -3.77, 1.92],
+      "Benchmark.JGIND": [-7.8, 15.99, 13.76]
+    },
+    "performanceMetrics": {
+      "IP.JGIND": {
+        "CR": -20.40,
+        "AAR": -9.68,
+        "Treynor Ratio": -0.61,
+        "Sharpe Ratio": -0.90
+      },
+      "Benchmark.JGIND": {
+        "CR": 6.96,
+        "AAR": 7.32,
+        "Treynor Ratio": 0.09,
+        "Sharpe Ratio": 0.35
+      }
+    }
+  },
+  "JCSEV": {
+    "years": "2015 - 2018",
+    "investableShares": {
+      "2015": ["CITY LODGE HOTELS", "SUN INTERNATIONAL"],
+      "2016": ["CITY LODGE HOTELS", "CLICKS GROUP", "FAMOUS BRANDS", "ITALTILE", "LEWIS GROUP", "MR PRICE GROUP", "SHOPRITE", "SPAR GROUP", "SUN INTERNATIONAL", "SPUR", "THE FOSCHINI GROUP", "TRUWORTHS INTL", "TSOGO SUN", "WOOLWORTHS HDG"],
+      "2017": []
+    },
+    "annualReturns": {
+      "IP.JCSEV": [-5.06, 9.05, 0],
+      "Benchmark.JCSEV": [-4.15, -4.84, 11.48]
+    },
+    "performanceMetrics": {
+      "IP.JCSEV": {
+        "CR": 12.48,
+        "AAR": 1.33,
+        "Treynor Ratio": 0.29,
+        "Sharpe Ratio": 1.17
+      },
+      "Benchmark.JCSEV": {
+        "CR": 0.51,
+        "AAR": 0.83,
+        "Treynor Ratio": 0.01,
+        "Sharpe Ratio": 0.03
+      }
+    }
+  }
+}
